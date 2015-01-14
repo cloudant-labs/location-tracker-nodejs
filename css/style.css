@@ -1,0 +1,361 @@
+/* BASIC STYLINGS
+============================================================================= */
+
+html, body {
+    height: 100%;
+}
+body {
+    font-family: 'helvetica-neue', helvetica;
+    color: white;
+    background: #245a85;
+}
+nav {
+    display: block;
+    width: 100%;
+    position: fixed;
+    height: 48px;
+    background-color: #222b33; //rgba(34, 30, 31, 0.8);
+    ;
+    z-index: 1;
+}
+#cloudant-logo {
+    background: url('../images/Cloudant_Icon_RGB.png') no-repeat center center;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    display: inline-block;
+    -0-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+    top: 6px;
+    left: 4px;
+}
+nav .page-title {
+    position: relative;
+    height: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    color: white;
+    display: block;
+    text-align: center;
+    line-height: 48px;
+    text-transform: uppercase;
+}
+a {
+    color: #0ce3ac;
+}
+a, a:hover, a:active {
+    text-decoration: none;
+    background: transparent;
+}
+.btn {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 200;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 24px;
+    font-size: 16px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-radius: 0;
+    color: #ffffff;
+}
+.btn:hover {
+    background-color: #F3622D;
+    color: white;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+.btn-primary {
+    background-color: #3a8cc0;
+}
+.btn-info {
+    background-color: #329898;
+}
+.btn-save {
+    background-color: #329898;
+}
+pre {
+    margin-bottom: 20px;
+}
+/* WELCOME PAGE*/
+
+.content-table {
+    display: table;
+    height: inherit;
+    width: 100%;
+}
+.content-table-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+.directional-copy {
+    color: #6fc4e8;
+    text-align: center;
+}
+/* LOCATION PAGE*/
+
+.center-container {
+    width: 100%;
+    display: table;
+    height: inherit;
+    position: absolute;
+    top: 0;
+}
+.table-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+.center-block {
+    width: 50%;
+    margin: 0 auto;
+}
+.button-bottom {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+.button-bottom .btn {
+    margin-top: 1px;
+}
+#map, #mapResult {
+    background-color: #221e1f;
+    height: auto;
+    display: block;
+    top: 0px;
+    bottom: 192px;
+    position: absolute;
+    width: 100%;
+}
+#mapResult.result {
+    bottom: 72px;
+}
+.location-tracker-bottom {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    width: 100%;
+}
+.long-lat-container {
+    width: 100%;
+    display: table;
+    height: 120px;
+    background-color: white;
+}
+.longitude, .latitude {
+    vertical-align: middle;
+    height: 120px;
+    display: table-cell;
+    width: 50%;
+    text-align: center;
+    font-size: 28px;
+    line-height: 8px;
+    color: #717981;
+}
+.latitude {
+    border-left: 1px solid #ccc;
+}
+.longitude span, .latitude span {
+    font-size: 16px;
+    color: #909aa5;
+    font-weight: 200;
+}
+.save-data {
+    position: relative;
+    display: block;
+    height: 260px;
+}
+.save-data .cloudant-icon {
+    background: url('../images/sprite.png') no-repeat -55px 0px;
+    position: relative;
+    margin: auto;
+}
+.save-data .arrow-icon {
+    background: url('../images/sprite.png') no-repeat -355px 0px;
+    position: relative;
+    margin: -12px auto -24px auto;
+}
+.save-data .dot {
+    display: block;
+    position: relative;
+    height: 8px;
+    width: 8px;
+    background-color: #f2f2f2;
+    margin: 8px auto;
+}
+.save-data .location-icon {
+    background: url('../images/sprite.png') no-repeat -5px 0px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -20px;
+}
+.save-data .cloudant-icon, .save-data .arrow-icon, .save-data .location-icon {
+    display: block;
+    width: 40px;
+    height: 60px;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+/* ANIMATION STYLINGS
+============================================================================= */
+/* basic styling for entering and leaving */
+/* left and right added to ensure full width */
+
+#location-views {
+    padding-top: 48px;
+    top: 0;
+    height: 100%;
+    background-color: #245a85;
+    position: absolute;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+.anim-page-transition-js {
+    display: block;
+    position: relative;
+    height: 100%;
+}
+.globe, .message {
+    display: block;
+    position: relative;
+    width: 340px;
+    overflow: hidden;
+    left: 50%;
+    margin-left: -170px;
+}
+.globe {
+    margin-top: -60px;
+    height: 240px;
+}
+.message {
+    text-align: center;
+    height: 320px;
+    margin-top: -120px;
+}
+.message .success-icon, .message .error-icon {
+    margin-left: -21px;
+    top: 10px;
+    left: 50%;
+}
+.message .success-icon {
+    background: url('../images/sprite.png') no-repeat -390px 0px;
+}
+.message .error-icon {
+    background: url('../images/sprite.png') no-repeat -346px 0px;
+}
+.message h3 {
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    font-size: 44px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.message span {
+    font-size: 24px;
+    font-weight: bold;
+}
+.globe h1 {
+    top: 60px;
+    z-index: 2;
+    text-align: center;
+    position: inherit;
+    font-size: 44px;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, .4);
+    display: block;
+}
+.globe .location-exclamation {
+    display: block;
+    position: absolute;
+    right: 48px;
+    top: -13px;
+}
+.globe .exclamation {
+    background: url('../images/sprite.png') no-repeat center left;
+    top: 10px;
+}
+.globe .dot {
+    background: url('../images/sprite.png') no-repeat -260px 0px;
+    top: -20px;
+}
+.globe .exclamation, .globe .dot, .message .success-icon, .message .error-icon {
+    width: 43px;
+    height: 52px;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+    position: relative;
+}
+.globe-mask {
+    z-index: 1;
+    background: url('../images/world_map_mask.png') no-repeat center center;
+    width: inherit;
+    height: inherit;
+    top: 0;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+.globe-map {
+    z-index: 0;
+    background: url('../images/world_map.png') repeat-x top left;
+    width: 768px;
+    height: 240px;
+    top: 0;
+    left: 0;
+    -moz-background-size: 50%;
+    -webkit-background-size: 50%;
+    background-size: 50%;
+    -webkit-animation: 15.0s globeLoopAnim infinite linear;
+    -moz-animation: 15.0s globeLoopAnim infinite linear;
+    animation: 15.0s globeLoopAnim infinite linear;
+}
+.globe-mask, .globe-map {
+    position: absolute;
+    display: block;
+}
+/* Globe LOOP */
+
+@keyframes globeLoopAnim {
+    from {
+        transform: translateX(0px);
+    }
+    to {
+        transform: translateX(-384px);
+    }
+}
+@-webkit-keyframes globeLoopAnim {
+    from {
+        -webkit-transform: translateX(0px);
+    }
+    to {
+        -webkit-transform: translateX(-384px);
+    }
+}
+@-moz-keyframes globeLoopAnim {
+    from {
+        -moz-transform: translateX(0px);
+    }
+    to {
+        -moz-transform: translateX(-384px);
+    }
+}
