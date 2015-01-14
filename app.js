@@ -7,7 +7,6 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 
 .value("map", {})
     .value("watchID", null)
-    .value("db", new PouchDB('localdb'))
     .value("remotedb", 'https://USERNAME:PASSWORD@USERNAME.cloudant.com/locationtracker')
     .value("num", 0)
     .value("successMessage", {})
@@ -53,7 +52,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 
 /* location-tracking.html Controller */
 
-.controller('locationTrackingController', function($scope, map, watchID, db, num, trackingMapInitialized) {
+.controller('locationTrackingController', function($scope, map, watchID, pouchLocal, num, trackingMapInitialized) {
 
     var osmUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
     var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
@@ -69,10 +68,12 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             zoom: 18,
             zoomControl: true
         });
+        trackingMapInitialized = true;
     }
     var last_lon = 0;
     var last_lat = 0;
     var session_id = guid();
+    var db = pouchLocal;
 
     // add location control to global name space for testing only
     // on a production site, omit the "lc = "!
@@ -175,9 +176,11 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
     });
 })
 
-.controller('locationTrackingSaveDataController', function($scope, map, watchID, db, remotedb, successMessage, errorMessage) {
+.controller('locationTrackingSaveDataController', function($scope, map, watchID, pouchLocal, remotedb, successMessage, errorMessage) {
 
     navigator.geolocation.clearWatch(watchID);
+
+    db = pouchLocal;
 
     setInterval(function() {
         $(".dot-anim")
@@ -227,55 +230,65 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 })
 
 
-.controller('mapResultController', function($scope, remotedb,resultMapInitialized) {
+.controller('mapResultController', function($scope, pouchResult, resultMapInitialized) {
 
-    console.log("mapResultController");
+        console.log("mapResultController");
 
-    var p = remotedb;
-    var db = new PouchDB(p);
-    db.changes({
-        include_docs: true,
-        live: true
-    }).on('change', updateMovingLayer);
+        console.log(pouchResult);
 
-    if (!resultMapInitialized) {
-        var mapResult = new L.Map('mapResult');
-    }
+        var db = pouchResult;
+        db.changes({
+            include_docs: true,
+            live: true
+        }).on('change', updateMovingLayer);
 
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-        maxZoom: 20,
-        attribution: 'Map data &copy; ' +
-            '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-        detectRetina: true,
-        id: 'examples.map-20v6611k'
-    }).addTo(mapResult);
+        if (!resultMapInitialized) {
+            var mapResult = new L.Map('mapResult');
+            resultMapInitialized = true;
+        }
 
-    var movementLayer = L.geoJson(null, {
-        pointToLayer: function(feature, latlng) {
-            markeroptions = {
-                icon: L.icon({
-                    iconUrl: 'js/images/marker-icon.png',
-                    iconRetinaUrl: 'js/images/marker-icon-2x.png',
-                    iconSize: [25, 41],
-                    iconAnchor: [10, 10],
-                    shadowURL: 'js/images/marker-icon-shadow.png',
-                    shadowRetinaURL: 'js/images/marker-icon-shadow-2x.png',
-                    shadowSize: [41, 41],
-                    shadowAnchor: [10, 10]
-                })
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+            maxZoom: 20,
+            attribution: 'Map data &copy; ' +
+                '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            detectRetina: true,
+            id: 'examples.map-20v6611k'
+        }).addTo(mapResult);
+
+        var movementLayer = L.geoJson(null, {
+            pointToLayer: function(feature, latlng) {
+                markeroptions = {
+                    icon: L.icon({
+                        iconUrl: 'js/images/marker-icon.png',
+                        iconRetinaUrl: 'js/images/marker-icon-2x.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [10, 10],
+                        shadowURL: 'js/images/marker-icon-shadow.png',
+                        shadowRetinaURL: 'js/images/marker-icon-shadow-2x.png',
+                        shadowSize: [41, 41],
+                        shadowAnchor: [10, 10]
+                    })
+                }
+                return L.marker(latlng, markeroptions);
             }
-            return L.marker(latlng, markeroptions);
-        }
-    }).addTo(mapResult);
+        }).addTo(mapResult);
 
-    function updateMovingLayer(change) {
-        if (!change.doc._deleted && change.doc.type == 'Feature') {
-            movementLayer.addData(change.doc);
-            mapResult.fitBounds(movementLayer.getBounds());
+        function updateMovingLayer(change) {
+            if (!change.doc._deleted && change.doc.type == 'Feature') {
+                movementLayer.addData(change.doc);
+                mapResult.fitBounds(movementLayer.getBounds());
+            }
         }
-    }
-})
+    })
+    .factory('pouchLocal', [function() {
+        var db = new PouchDB('localdb');
+        return db;
+    }])
+    .factory('pouchResult', ["remotedb", function(remotedb) {
+        var db = new PouchDB(remotedb);
+        return db;
+    }])
 
 
 /* Directive used on controller items to allow for multiple trans in/out */
