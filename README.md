@@ -16,6 +16,18 @@ Run the project through npm:
 
     $ npm start
 
+## Deploying
+
+Complete these steps first if you have not already:
+
+1. [Install the Cloud Foundry command line interface.](https://www.ng.bluemix.net/docs/#starters/install_cli.html)
+2. Follow the instructions at the above link to connect to Bluemix.
+3. Follow the instructions at the above link to log in to Bluemix.
+
+Once you have completed the above steps, simply:
+
+    $ cf push
+
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE.txt).
