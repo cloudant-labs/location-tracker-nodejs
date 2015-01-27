@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/cloudant-labs/location-tracker-nodejs/issues"
   },
-  "homepage": "https://github.com/cloudant-labs/location-tracker-nodejs"
+  "homepage": "https://github.com/cloudant-labs/location-tracker-nodejs",
+  "dependencies": {
+    "express": "^4.11.1"
+  }
 }
