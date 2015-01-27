@@ -1,0 +1,5 @@
+---
+applications:
+- name:	cloudant-location-tracker
+  memory: 64M
+  host: cloudant-location-tracker-${random-word}
