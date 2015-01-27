@@ -1,0 +1,30 @@
+{
+  "name": "cloudant-location-tracker",
+  "version": "0.0.0",
+  "description": "A demo web application which records a device's location and saves this information to IBM Cloudant",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloudant-labs/location-tracker-nodejs.git"
+  },
+  "keywords": [
+    "PouchDB",
+    "AngularJS",
+    "Node.js",
+    "Bootstrap",
+    "Cloudant",
+    "HTML5",
+    "JavaScript",
+    "geospatial"
+  ],
+  "author": "Bradley Holt <bradley.holt@us.ibm.com> (https://cloudant.com/)",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/cloudant-labs/location-tracker-nodejs/issues"
+  },
+  "homepage": "https://github.com/cloudant-labs/location-tracker-nodejs"
+}
