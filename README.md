@@ -12,9 +12,9 @@ Get the project and install its dependencies:
 
 ## Running
 
-Run the project through npm:
+Run the project through [Foreman](https://github.com/ddollar/foreman):
 
-    $ npm start
+    $ foreman start
 
 ## Deploying
 
