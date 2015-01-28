@@ -24,6 +24,10 @@ Complete these steps first if you have not already:
 2. Follow the instructions at the above link to connect to Bluemix.
 3. Follow the instructions at the above link to log in to Bluemix.
 
+Create a Cloudant service within Bluemix if it has not already been created:
+
+    $ cf create-service cloudantNoSQLDB Shared cloudant-location-tracker-db
+
 Once you have completed the above steps, simply:
 
     $ cf push
