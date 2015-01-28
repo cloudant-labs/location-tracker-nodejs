@@ -7,6 +7,7 @@ var express = require('express'),
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
+app.set('services', JSON.parse(process.env.VCAP_SERVICES || '{}'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
