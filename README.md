@@ -32,6 +32,18 @@ Once you have completed the above steps, simply:
 
     $ cf push
 
+## Configuring
+
+### Development
+
+Local configuration is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
+
+    VCAP_SERVICES={"cloudantNoSQLDB": [{"name": "cloudant-location-tracker-db","label": "cloudantNoSQLDB","plan": "Shared","credentials": {"username": "your-username","password": "your-password","host": "your-host","port": 443,"url": "https://your-username:your-password@your-host"}}]}
+
+### Production
+
+Services created within Bluemix are automatically added to the `VCAP_SERVICES` environment variable. Therefore, no further configuration is needed.
+
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE.txt).
