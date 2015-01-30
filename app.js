@@ -2,12 +2,28 @@
 
 var express = require('express'),
     http = require('http'),
-    path = require('path');
+    path = require('path'),
+    cloudant = require('cloudant');
 
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
-app.set('services', JSON.parse(process.env.VCAP_SERVICES || '{}'));
+(function(app) {
+  if (process.env.VCAP_SERVICES) {
+    var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
+    if (vcapServices.cloudantNoSQLDB) {
+      vcapServices.cloudantNoSQLDB.map(function(service) {
+        if (service.name && service.credentials) {
+          app.set(service.name, cloudant({
+            username: service.credentials.username,
+            password: service.credentials.password,
+            account: service.credentials.username
+          }));
+        }
+      });
+    }
+  }
+})(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
