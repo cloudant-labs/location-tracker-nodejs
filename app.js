@@ -30,8 +30,6 @@ var app = express();
   }
 })(app);
 
-app.use(express.static(path.join(__dirname, 'public')));
-
 program
   .version(pkg.version)
   .option('-p, --port <port>', 'port on which to listen (defaults to 3000)', parseInt);
@@ -80,9 +78,9 @@ program
 
 program.parse(process.argv);
 
-app.set('port', program.port || process.env.PORT || 3000);
-
 if (createServer) {
+  app.set('port', program.port || process.env.PORT || 3000);
+  app.use(express.static(path.join(__dirname, 'public')));
   http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
   });
