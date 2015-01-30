@@ -36,13 +36,57 @@ program
   .version(pkg.version)
   .option('-p, --port <port>', 'port on which to listen (defaults to 3000)', parseInt);
 
+var createServer = true;
+program
+  .command('db <method>')
+  .description('create (put) or delete the database')
+  .action(function(method, options) {
+    createServer = false;
+    switch (method) {
+      case 'put':
+        app.get('cloudant-location-tracker-db').db.create('location-tracker', function(err, body) {
+          if (!err) {
+            console.log('Database created');
+          } else {
+            if (412 == err.status_code) {
+              console.log('Database already exists');
+            } else {
+              console.error('Error creating database');
+            }
+          }
+        });
+        break;
+      case 'delete':
+        app.get('cloudant-location-tracker-db').db.destroy('location-tracker', function(err, body) {
+          if (!err) {
+            console.log('Database deleted');
+          } else {
+            if (404 == err.status_code) {
+              console.log('Database does not exist');
+            } else {
+              console.error('Error deleting database');
+            }
+          }
+        });
+        break;
+    }
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ db put');
+    console.log('    $ db delete');
+    console.log();
+  });
+
 program.parse(process.argv);
 
 app.set('port', program.port || process.env.PORT || 3000);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+if (createServer) {
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log('Express server listening on port ' + app.get('port'));
+  });
+}
 
 //-------------------------------------------------------------------------------
 // Copyright IBM Corp. 2015
