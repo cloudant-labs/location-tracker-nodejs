@@ -6,7 +6,10 @@ var express = require('express'),
     path = require('path'),
     cloudant = require('cloudant'),
     program = require('commander'),
+    dotenv = require('dotenv'),
     pkg = require(path.join(__dirname, 'package.json'));
+
+dotenv.load();
 
 var app = express();
 
