@@ -1,13 +1,15 @@
+#!/usr/bin/env node
 // Licensed under the Apache 2.0 License. See footer for details.
 
 var express = require('express'),
     http = require('http'),
     path = require('path'),
-    cloudant = require('cloudant');
+    cloudant = require('cloudant'),
+    program = require('commander'),
+    pkg = require(path.join(__dirname, 'package.json'));
 
 var app = express();
 
-app.set('port', process.env.PORT || 3000);
 (function(app) {
   if (process.env.VCAP_SERVICES) {
     var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
@@ -26,6 +28,14 @@ app.set('port', process.env.PORT || 3000);
 })(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+program
+  .version(pkg.version)
+  .option('-p, --port <port>', 'port on which to listen (defaults to 3000)', parseInt);
+
+program.parse(process.argv);
+
+app.set('port', program.port || process.env.PORT || 3000);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
