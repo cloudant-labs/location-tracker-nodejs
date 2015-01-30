@@ -29,6 +29,7 @@
   "homepage": "https://github.com/cloudant-labs/location-tracker-nodejs",
   "dependencies": {
     "cloudant": "^1.0.0-beta3",
+    "commander": "^2.6.0",
     "express": "^4.11.1"
   }
 }
