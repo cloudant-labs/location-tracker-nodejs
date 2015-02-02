@@ -103,8 +103,11 @@ if (createServer) {
       hostRewrite: true
     });
   });
+  // Set the port number based on a command line switch, an environment variable, or a default value
   app.set('port', program.port || process.env.PORT || 3000);
+  // Serve static assets
   app.use(express.static(path.join(__dirname, 'public')));
+  // Create the HTTP server
   http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
   });
