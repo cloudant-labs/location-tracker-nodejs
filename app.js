@@ -7,6 +7,8 @@ var express = require('express'),
     cloudant = require('cloudant'),
     program = require('commander'),
     dotenv = require('dotenv'),
+    httpProxy = require('http-proxy'),
+    url = require('url'),
     pkg = require(path.join(__dirname, 'package.json'));
 
 dotenv.load();
@@ -79,6 +81,28 @@ program
 program.parse(process.argv);
 
 if (createServer) {
+  // Proxy requests for `/api/` to the Cloudant database server
+  var apiProxy = httpProxy.createProxyServer();
+  app.all('/api/*', function(req, res) {
+    if (!app.get('cloudant-location-tracker-db')) {
+      return res.status(500).json({ error: 'No database server configured' })
+    }
+    // Remove first segment of the path (`/api/`)
+    var pathSegments = req.url.substr(1).split('/');
+    pathSegments.shift();
+    req.url = '/' + pathSegments.join('/');
+    // Strip out auth from Cloudant URL
+    var cloudantUrl = url.parse(app.get('cloudant-location-tracker-db').config.url);
+    var cloudantUrlSansAuth = url.parse(cloudantUrl.protocol + '//' + cloudantUrl.host + cloudantUrl.path);
+    // Override the Host header value to be that of the Cloudant database server
+    req.headers['host'] = cloudantUrl.host;
+    // TODO: Validate SSL certificate by setting and configuring `agent: https.globalAgent`
+    apiProxy.web(req, res, {
+      target: url.format(cloudantUrlSansAuth),
+      secure: true,
+      hostRewrite: true
+    });
+  });
   app.set('port', program.port || process.env.PORT || 3000);
   app.use(express.static(path.join(__dirname, 'public')));
   http.createServer(app).listen(app.get('port'), function(){
