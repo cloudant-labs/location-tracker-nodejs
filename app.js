@@ -78,6 +78,33 @@ program
     console.log();
   });
 
+program
+  .command('api <endpoint>')
+  .description('Call an API endpoint with preconfigured settings')
+  .action(function(endpoint, options) {
+    createServer = false;
+    switch (endpoint) {
+      case 'set_permissions':
+        app.get('cloudant-location-tracker-db').set_permissions({
+          database: 'location-tracker',
+          username: 'nobody',
+          roles: ['_reader']
+        }, function(err, result) {
+          if (!err) {
+            console.log('Permissions set');
+          } else {
+            console.error('Error setting permission');
+          }
+        });
+        break;
+    }
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ api set_permissions');
+    console.log();
+  });
+
 program.parse(process.argv);
 
 if (createServer) {
