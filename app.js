@@ -36,24 +36,24 @@ var app = express();
 
 program
   .version(pkg.version)
-  .option('-p, --port <port>', 'port on which to listen (defaults to 3000)', parseInt);
+  .option('-p, --port <port>', 'Port on which to listen (defaults to 3000)', parseInt);
 
 var createServer = true;
 program
   .command('db <method>')
-  .description('create (put) or delete the database')
+  .description('Create (put) or delete the database')
   .action(function(method, options) {
     createServer = false;
     switch (method) {
       case 'put':
         app.get('cloudant-location-tracker-db').db.create('location-tracker', function(err, body) {
           if (!err) {
-            console.log('Database created');
+            console.log('Location tracker database created');
           } else {
             if (412 == err.status_code) {
-              console.log('Database already exists');
+              console.log('Location tracker database already exists');
             } else {
-              console.error('Error creating database');
+              console.error('Error creating location tracker database');
             }
           }
         });
@@ -119,7 +119,7 @@ if (createServer) {
   var apiProxy = httpProxy.createProxyServer();
   app.all('/api/*', function(req, res) {
     if (!app.get('cloudant-location-tracker-db')) {
-      return res.status(500).json({ error: 'No database server configured' })
+      return res.status(500).json({error: 'No database server configured'});
     }
     // Remove first segment of the path (`/api/`)
     var pathSegments = req.url.substr(1).split('/');
