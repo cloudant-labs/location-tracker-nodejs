@@ -9,6 +9,8 @@ var express = require('express'),
     dotenv = require('dotenv'),
     httpProxy = require('http-proxy'),
     url = require('url'),
+    bodyParser = require('body-parser'),
+    api = require('./routes/api'),
     pkg = require(path.join(__dirname, 'package.json'));
 
 dotenv.load();
@@ -108,6 +110,11 @@ program
 program.parse(process.argv);
 
 if (createServer) {
+  var jsonParser = bodyParser.json();
+  // Handle user signup
+  app.post('/api/_users/', jsonParser, api.postUser);
+  // Handle user login
+  app.post('/api/_session', jsonParser, api.postSession);
   // Proxy requests for `/api/` to the Cloudant database server
   var apiProxy = httpProxy.createProxyServer();
   app.all('/api/*', function(req, res) {
