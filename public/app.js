@@ -176,7 +176,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
     });
 })
 
-.controller('locationTrackingSaveDataController', function($scope, map, watchID, pouchLocal, remotedb, successMessage, errorMessage) {
+.controller('locationTrackingSaveDataController', function($scope, map, watchID, pouchLocal, pouchResult, successMessage, errorMessage) {
 
     navigator.geolocation.clearWatch(watchID);
 
@@ -193,7 +193,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             }, 750)
     }, 2000);
 
-    db.replicate.to(remotedb).on('complete', function(info) {
+    db.replicate.to(pouchResult).on('complete', function(info) {
 
         console.log("replicate complete");
 
@@ -287,6 +287,17 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
     }])
     .factory('pouchResult', ["remotedb", function(remotedb) {
         var db = new PouchDB(remotedb);
+        // TODO: This is a horrible hack, fix it
+        // See if the user is logged in
+        db.getSession().then(function(response) {
+            if (!response.userCtx.name) {
+                // User is not logged in, create a new API key
+                $.post('/api/_users/', function(data) {
+                    // Login the user
+                    db.login(data.name, data.password);
+                }, 'json');
+            }
+        });
         return db;
     }])
 
