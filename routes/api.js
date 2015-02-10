@@ -11,12 +11,20 @@ module.exports.postUser = function(req, res) {
   }
   cloudant.generate_api_key(function(err, api) {
     if (!err) {
-      res.json({
-        ok: true,
-        name: api.key,
-        password: api.password
-       });
+      cloudant.set_permissions({database:'location-tracker', username:api.key, roles:['_reader', '_writer']}, function(err, result) {
+        if (!err) {
+          res.json({
+            ok: true,
+            name: api.key,
+            password: api.password
+          });
+        } else {
+          console.error(err);
+          res.status(500).json({error: 'Internal Server Error'});
+        }
+      });
      } else {
+        console.error(err);
         res.status(500).json({error: 'Internal Server Error'});
      }
   });
@@ -40,6 +48,7 @@ module.exports.postSession = function(req, res) {
         roles: body.roles
       });
     } else {
+      console.error(err);
       res.status(500).json({error: 'Internal Server Error'});
     }
   });
