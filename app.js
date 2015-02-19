@@ -156,6 +156,10 @@ if (createServer) {
     var pathSegments = req.url.substr(1).split('/');
     pathSegments.shift();
     req.url = '/' + pathSegments.join('/');
+    // Work around Cloudant bug by stripping out query strings from top level URLs
+    if (0 == req.url.indexOf('/?')) {
+      req.url = '/';
+    }
     // Strip out auth from Cloudant URL
     var cloudantUrl = url.parse(app.get('cloudant-location-tracker-db').config.url);
     var cloudantUrlSansAuth = url.parse(cloudantUrl.protocol + '//' + cloudantUrl.host + cloudantUrl.path);
