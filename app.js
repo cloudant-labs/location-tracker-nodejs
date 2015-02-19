@@ -143,7 +143,7 @@ program.parse(process.argv);
 if (createServer) {
   var jsonParser = bodyParser.json();
   // Handle user signup
-  app.post('/api/_users/', jsonParser, api.postUser);
+  app.put('/api/_users/:id', jsonParser, api.putUser);
   // Handle user login
   app.post('/api/_session', jsonParser, api.postSession);
   // Proxy requests for `/api/` to the Cloudant database server

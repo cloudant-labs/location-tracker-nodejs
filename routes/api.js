@@ -1,6 +1,9 @@
 // Licensed under the Apache 2.0 License. See footer for details.
 
-module.exports.postUser = function(req, res) {
+var crypto = require('crypto'),
+    algorithm = 'AES-256-CTR';
+
+module.exports.putUser = function(req, res) {
   var app = req.app;
   var cloudant = app.get('cloudant-location-tracker-db');
   if (!cloudant) {
@@ -9,14 +12,35 @@ module.exports.postUser = function(req, res) {
   if (!req.body) {
     return res.sendStatus(400);
   }
+  if (req.params.id != 'org.couchdb.user:' + req.body.name) {
+    // TOOD: Better handle this error
+    return res.sendStatus(400);
+  }
+  var usersDb = cloudant.use('users');
   cloudant.generate_api_key(function(err, api) {
     if (!err) {
       cloudant.set_permissions({database:'location-tracker', username:api.key, roles:['_reader', '_writer']}, function(err, result) {
         if (!err) {
-          res.json({
-            ok: true,
-            name: api.key,
-            password: api.password
+          var cipher = crypto.createCipher(algorithm, req.body.password);
+          var encryptedApiPassword = cipher.update(api.password, 'utf8', 'hex');
+          encryptedApiPassword += cipher.final('hex');
+          var user = {
+            _id: req.params.id,
+            name: req.body.name,
+            api_key: api.key,
+            api_password: encryptedApiPassword
+          };
+          usersDb.insert(user, user._id, function(err, body) {
+            if (!err) {
+              res.status(201).json({
+                ok: true,
+                id: user._id,
+                rev: body.rev
+              });
+            } else {
+              console.error(err);
+              res.status(500).json({error: 'Internal Server Error'});
+            }
           });
         } else {
           console.error(err);
@@ -39,16 +63,25 @@ module.exports.postSession = function(req, res) {
   if (!req.body) {
     return res.sendStatus(400);
   }
-  cloudant.auth(req.body.name, req.body.password, function(err, body, headers) {
+  var usersDb = cloudant.use('users');
+  usersDb.get('org.couchdb.user:' + req.body.name, function(err, body) {
     if (!err) {
-      res.setHeader("Set-Cookie", headers['set-cookie']);
-      res.json({
-        ok: true,
-        name: req.body.name,
-        roles: body.roles
+      var decipher = crypto.createDecipher(algorithm, req.body.password);
+      var decryptedApiPassword = decipher.update(body.api_password, 'hex', 'utf8');
+      decryptedApiPassword += decipher.final('utf8');
+      cloudant.auth(body.api_key, decryptedApiPassword, function(err, body, headers) {
+        if (!err) {
+          res.setHeader("Set-Cookie", headers['set-cookie']);
+          res.json({
+            ok: true,
+            name: req.body.name,
+            roles: body.roles
+          });
+        } else {
+          res.status(500).json({error: 'Internal Server Error'});
+        }
       });
     } else {
-      console.error(err);
       res.status(500).json({error: 'Internal Server Error'});
     }
   });
