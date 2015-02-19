@@ -290,13 +290,28 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
         // TODO: This is a horrible hack, fix it
         // See if the user is logged in
         db.getSession().then(function(response) {
-            if (!response.userCtx.name) {
-                // User is not logged in, create a new API key
-                $.post('/api/_users/', function(data) {
-                    // Login the user
-                    db.login(data.name, data.password);
-                }, 'json');
-            }
+          if (!response.userCtx.name) {
+            // User is not logged in, create a new user
+            // TODO: Allow user to choose username and password
+            var userId = 'user' + Math.floor((Math.random() * 1000) + 1).toString();
+            var password = 'passw0rd';
+            db.signup(userId, password, function (err, response) {
+              if (!err) {
+                db.login(userId, password);
+              } else {
+                if (err.name === 'conflict') {
+                  // Username already exists
+                  // TODO: Handle error
+                } else if (err.name === 'forbidden') {
+                  // Invalid username
+                  // TODO: Handle error
+                } else {
+                  // Some other error
+                  // TODO: Handle error
+                }
+              }
+            });
+          }
         });
         return db;
     }])
