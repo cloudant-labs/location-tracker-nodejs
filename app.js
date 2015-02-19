@@ -66,6 +66,17 @@ program
             }
           }
         });
+        app.get('cloudant-location-tracker-db').db.create('users', function(err, body) {
+          if (!err) {
+            console.log('Users database created');
+          } else {
+            if (412 == err.status_code) {
+              console.log('Users database already exists');
+            } else {
+              console.error('Error creating users database');
+            }
+          }
+        });
         break;
       case 'delete':
         app.get('cloudant-location-tracker-db').db.destroy('location-tracker', function(err, body) {
@@ -76,6 +87,17 @@ program
               console.log('Database does not exist');
             } else {
               console.error('Error deleting database');
+            }
+          }
+        });
+        app.get('cloudant-location-tracker-db').db.destroy('users', function(err, body) {
+          if (!err) {
+            console.log('Users database deleted');
+          } else {
+            if (404 == err.status_code) {
+              console.log('Users database does not exist');
+            } else {
+              console.error('Error deleting users database');
             }
           }
         });
