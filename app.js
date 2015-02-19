@@ -46,9 +46,18 @@ program
     createServer = false;
     switch (method) {
       case 'put':
-        app.get('cloudant-location-tracker-db').db.create('location-tracker', function(err, body) {
+        var cloudant = app.get('cloudant-location-tracker-db');
+        cloudant.db.create('location-tracker', function(err, body) {
           if (!err) {
             console.log('Location tracker database created');
+            // TODO: Make this happen even if location tracker database already exists
+            cloudant.set_permissions({database:'location-tracker', username:'nobody', roles:['_reader']}, function(err, result) {
+              if (!err) {
+                console.log('Location tracker database is now world readable');
+              } else {
+                console.error('Error setting permissions on location tracker database');
+              }
+            });
           } else {
             if (412 == err.status_code) {
               console.log('Location tracker database already exists');
