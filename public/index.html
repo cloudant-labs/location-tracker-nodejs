@@ -9,32 +9,37 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <!-- CSS -->
-    <link rel="stylesheet" href="css/leaflet.css" />
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style/leaflet.css" />
+    <link rel="stylesheet" href="style/L.Control.Locate.min.css" />
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="style/style.css">
+    
     <!-- JS -->
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="js/leaflet.js"></script>
-    <script src="js/L.Control.Locate.min.js"></script>
-    <script src="http://code.angularjs.org/1.3.8/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-route.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-animate.min.js"></script>
+    <script src="script/leaflet.js"></script>
+    <script src="script/L.Control.Locate.min.js"></script>
+
+    <script src="https://code.angularjs.org/1.3.11/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.11/angular-route.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.11/angular-animate.min.js"></script>
+    
     <script src="//cdn.jsdelivr.net/velocity/1.2.1/velocity.min.js"></script>
     <script src="//cdn.jsdelivr.net/velocity/1.2.1/velocity.ui.min.js"></script>
-    <script src="js/pouchdb.min.js"></script>
-    <script src="js/pouchdb.authentication.min.js"></script>
-    <script src="app.js"></script>
+    <script src="script/pouchdb.min.js"></script>
+    <script src="script/app.js"></script>
+
+    
+    <link rel="apple-touch-icon" href="images/location_tracker_appicon.png" />
+
 </head>
 
 <body ng-app="locationTrackingApp">
-    <nav>
+    <a href="#welcome" title="IBM Cloudant"><nav>
         <div id="cloudant-logo">
             <!-- * -->
         </div>
         <div class="page-title">Location Tracker</div>
-    </nav>
+    </nav></a>
     <div class="center-container">
         <div class="table-cell">
             <div class="center-block">
