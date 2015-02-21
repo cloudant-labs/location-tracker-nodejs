@@ -217,7 +217,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 
 
 /* savedata.html Controller */
-.controller('locationTrackingSaveDataController', function($scope, map, watchID, pouchLocal, remotedb, successMessage, errorMessage) {
+.controller('locationTrackingSaveDataController', function($scope, map, watchID, pouchLocal, pouchResult, successMessage, errorMessage) {
 
     var timer;
 
@@ -237,7 +237,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                 }, 750)
         }, 2000);
 
-        db.replicate.to(remotedb).on('complete', function(info) {
+        db.replicate.to(pouchResult).on('complete', function(info) {
             var timer = setTimeout(function() {
                 successMessage.docs_written = info.docs_written;
                 successMessage.start_time = info.start_time;
@@ -378,9 +378,20 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 
 /* cloudant db storage for result map */
 .factory('pouchResult', ["remotedb", function(remotedb) {
-    var db = new PouchDB(remotedb);
-    return db;
-}])
+        var db = new PouchDB(remotedb);
+        // TODO: This is a horrible hack, fix it
+        // See if the user is logged in
+        db.getSession().then(function(response) {
+            if (!response.userCtx.name) {
+                // User is not logged in, create a new API key
+                $.post('/api/_users/', function(data) {
+                    // Login the user
+                    db.login(data.name, data.password);
+                }, 'json');
+            }
+        });
+        return db;
+    }])
 
 
 /* Directive used on controller items to allow for multiple trans in/out */
