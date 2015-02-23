@@ -42,12 +42,42 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
         templateUrl: 'map-result.html',
         controller: 'mapResultController'
     }).
+    when('/sign-up', {
+        templateUrl: 'sign-up.html',
+        controller: 'locationSignUpController'
+    }).
+    when('/sign-in', {
+        templateUrl: 'sign-in.html',
+        controller: 'locationSignInController'
+    }).
     otherwise({
         redirectTo: '/welcome'
     })
 
 }])
 
+
+/* sign-up.html Controller */
+.controller('locationSignUpController', function($scope) {
+
+    $scope.transEnter = function() {
+        $('.sign-up-btn').on("click", function(){
+            console.log("yo do something");
+        });
+    }
+    $scope.transLeave = function() {};
+})
+
+/* sign-in.html Controller */
+.controller('locationSignInController', function($scope) {
+
+    $scope.transEnter = function() {
+        $('.sign-in-btn').on("click", function(){
+            console.log("yo do something");
+        });
+    }
+    $scope.transLeave = function() {};
+})
 
 /* welcome.html Controller */
 .controller('locationWelcomeController', function($scope) {
