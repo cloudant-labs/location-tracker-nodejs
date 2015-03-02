@@ -81,7 +81,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 
 /* welcome.html Controller */
 .controller('locationWelcomeController', function($scope) {
-    $scope.transEnter = function() {}
+    $scope.transEnter = function() {};
     $scope.transLeave = function() {};
 })
 
