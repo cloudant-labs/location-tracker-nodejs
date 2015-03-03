@@ -2,7 +2,7 @@
     <div class="content-table">
         <div class="content-table-cell">
             <div class="globe trans-step2">
-                <h1 class="trans-step1">Welcome
+                <h1 class="trans-step1">Welcome<span ng-if="username">, {{username}}</span>
                 <div class="location-exclamation"><!-- * -->
                     <div class="location-icon"><!-- * --></div>
                     <div class="location-dot"><!-- * --></div>
@@ -21,7 +21,10 @@
         </div>
     </div>
     <div class="button-bottom trans-button">
-        <a href="#tracking" class="btn btn-block btn-primary">
+        <a href="#sign-up" class="btn btn-block btn-primary" ng-if="!username">
+            Sign Up
+        </a>
+        <a href="#tracking" class="btn btn-block btn-primary" ng-if="username">
             Start Location Data Tracking
         </a>
     </div>

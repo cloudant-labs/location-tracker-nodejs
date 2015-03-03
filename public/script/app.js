@@ -80,9 +80,16 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 })
 
 /* welcome.html Controller */
-.controller('locationWelcomeController', function($scope) {
+.controller('locationWelcomeController', function($scope, $location, authService) {
     $scope.transEnter = function() {};
     $scope.transLeave = function() {};
+    authService.getSession();
+    $scope.username = authService.username;
+    $scope.$on('auth:updated', function() {
+        $scope.$apply(function() {
+            $scope.username = authService.username;
+        });
+    });
 })
 
 
