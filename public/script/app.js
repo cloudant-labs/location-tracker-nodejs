@@ -94,13 +94,14 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 
 
 /* tracking.html Controller */
-.controller('locationTrackingController', function($scope, map, watchID, pouchLocal, num) {
+.controller('locationTrackingController', function($scope, map, watchID, pouchLocal, num, authService) {
 
     /* VARS */
     var mapTracker; // map object
     var lc; // location control object
     var last_lon = 0;
     var last_lat = 0;
+    //TODO: Deprecate session_id?
     var session_id = guid();
     var db = pouchLocal;
     var watchID = {}; //geolocation object holder
@@ -208,6 +209,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                 "coordinates": [lon, lat]
             },
             "properties": {
+                "username": authService.username,
                 "session_id": session_id,
                 "timestamp": position.timestamp
             }
