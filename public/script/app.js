@@ -412,6 +412,24 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
     }])
 
 
+/* cloudant authentication service */
+.factory('authService', ['$rootScope', 'pouchResult', function($rootScope, pouchResult) {
+    var authService = {};
+    authService.getSession = function() {
+        //TODO: Handle error
+        pouchResult.getSession().then(function(response) {
+            if (response.userCtx.name) {
+                authService.username = response.userCtx.name;
+            } else {
+                delete authService.username;
+            }
+            $rootScope.$broadcast('auth:updated');
+        });
+    };
+    return authService;
+}])
+
+
 /* Directive used on controller items to allow for multiple trans in/out */
 .directive('animationdirective', ['$animate', '$timeout',
     function($animate, $timeout) {
