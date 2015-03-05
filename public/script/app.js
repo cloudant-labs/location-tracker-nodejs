@@ -482,6 +482,14 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             $rootScope.$broadcast('auth:updated');
         });
     };
+    authService.logout = function() {
+        pouchResult.logout().then(function(response) {
+            delete authService.username;
+            $rootScope.$broadcast('auth:updated');
+        }).catch(function(err) {
+            $rootScope.$broadcast('auth:updated');
+        });
+    };
     return authService;
 }])
 
