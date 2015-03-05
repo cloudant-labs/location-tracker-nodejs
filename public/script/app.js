@@ -352,15 +352,15 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             _len = info.doc_count;
         });
 
-        // use alldocs to get the object rows, then run a loop to draw on the map.
-        db.allDocs({
-            include_docs: true,
-            endkey: "_"
-        }, function(err, response) {
+        // use Cloudant query to get results by user, then a run a loop to draw on the map
+        // TODO: Handle error
+        db.find({
+            selector: {'properties.username': {'$gte': ''}},
+        }).then(function (result) {
             for (var i = 0; i < _len - 1; i++) {
-                updateMovingLayer(response.rows[i].doc);
+                updateMovingLayer(result.docs[i]);
             };
-        })
+        });
 
         /* instantiate Leaflet map */
         mapResult = new L.Map('mapResult');
