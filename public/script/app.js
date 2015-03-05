@@ -446,6 +446,8 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                 delete authService.username;
             }
             $rootScope.$broadcast('auth:updated');
+        }).catch(function(err) {
+            $rootScope.$broadcast('auth:updated');
         });
     };
     authService.signup = function(userId, password) {
