@@ -339,7 +339,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 })
 
 
-.controller('mapResultController', function($scope, pouchResult) {
+.controller('mapResultController', function($scope, $location, pouchResult, authService) {
     var mapResult = {};
 
     /* triggered from velocity callback within the animation module `enter` hook */
@@ -429,6 +429,17 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
     /* triggered from velocity callback within the animation module `enter` hook */
     $scope.transLeave = function() {
         mapResult.remove();
+    };
+
+    $scope.signOut = function() {
+        authService.logout();
+        $scope.$on('auth:updated', function() {
+            $scope.$apply(function() {
+                if (!authService.username) {
+                    $location.path('/welcome');
+                }
+            });
+        });
     };
 
 })
