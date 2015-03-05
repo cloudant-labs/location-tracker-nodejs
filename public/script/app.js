@@ -82,11 +82,24 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 })
 
 /* sign-in.html Controller */
-.controller('locationSignInController', function($scope) {
+.controller('locationSignInController', function($scope, $location, authService) {
 
     $scope.transEnter = function() {
-        $('.sign-in-btn').on("click", function(){
-            console.log("yo do something");
+        $('.sign-in-btn').on('click', function(){
+            $('.sign-in-btn').attr('disabled', 'disabled');
+            authService.login($scope.login, $scope.password);
+            $scope.$on('auth:updated', function() {
+                $scope.$apply(function() {
+                    if (authService.username) {
+                        $location.path('/tracking');
+                    } else {
+                        // TODO: Better handle failed login up
+                        $('.sign-in-btn').removeAttr('disabled');
+                        $scope.login = null;
+                        $scope.password = null;
+                    }
+                });
+            });
         });
     }
     $scope.transLeave = function() {};
