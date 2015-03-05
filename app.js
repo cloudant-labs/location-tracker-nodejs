@@ -58,6 +58,28 @@ program
                 console.error('Error setting permissions on location tracker database');
               }
             });
+            var userLocationIndex = {
+              name: 'user-location',
+              type: 'json',
+              index: {
+                fields: [
+                  'properties.username',
+                  'properties.timestamp'
+                ]
+              }
+            };
+            // TODO: Make this happen even if location tracker database already exists
+            cloudant.use('location-tracker').index(userLocationIndex, function(err, result) {
+              if (!err) {
+                console.log('User location index created');
+              } else {
+                if (412 == err.status_code) {
+                  console.log('User location index already exists');
+                } else {
+                  console.error('Error creating user location index');
+                }
+              }
+            });
           } else {
             if (412 == err.status_code) {
               console.log('Location tracker database already exists');
