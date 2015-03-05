@@ -462,7 +462,6 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 .factory('authService', ['$rootScope', 'pouchResult', function($rootScope, pouchResult) {
     var authService = {};
     authService.getSession = function() {
-        //TODO: Handle error
         pouchResult.getSession().then(function(response) {
             if (response.userCtx.name) {
                 authService.username = response.userCtx.name;
@@ -475,7 +474,6 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
         });
     };
     authService.signup = function(userId, password) {
-        // TODO: Handle error
         pouchResult.signup(userId, password).then(function(response) {
             pouchResult.login(userId, password).then(function(response) {
                 authService.username = response.name;
