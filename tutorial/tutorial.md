@@ -16,7 +16,7 @@ If you're interested in learning all the steps needed to build this application,
 
 ### Installing
 
-The first step to installing the application is to clone the project from GitHub:
+The first step is to clone the project from GitHub:
 
     $ git clone https://github.com/cloudant-labs/location-tracker-nodejs.git
 
@@ -24,7 +24,9 @@ After cloning, you will have a new `location-tracker-nodejs` directory. Change i
 
     $ cd location-tracker-nodejs
 
-Next you'll need to [download and install Node.js](https://nodejs.org/download/), if you haven't already. The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
+If you don't care about running the Location Tracker application locally on your development machine, you can skip to the [Deploying to IBM Bluemix](#deploying-to-ibm-bluemix) section. Otherwise, keep reading.
+
+Next you'll need to [download and install Node.js](https://nodejs.org/download/), if you haven't already.The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
 
 ```json
 {
