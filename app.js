@@ -20,16 +20,15 @@ var app = express();
 (function(app) {
   if (process.env.VCAP_SERVICES) {
     var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
-    if (vcapServices.cloudantNoSQLDB) {
-      vcapServices.cloudantNoSQLDB.map(function(service) {
-        if (service.name && service.credentials) {
-          app.set(service.name, cloudant({
-            username: service.credentials.username,
-            password: service.credentials.password,
-            account: service.credentials.username
-          }));
-        }
-      });
+    if (vcapServices.cloudantNoSQLDB && vcapServices.cloudantNoSQLDB.length > 0) {
+      var service = vcapServices.cloudantNoSQLDB[0];
+      if (service.credentials) {
+        app.set('cloudant-location-tracker-db', cloudant({
+          username: service.credentials.username,
+          password: service.credentials.password,
+          account: service.credentials.username
+        }));
+      }
     }
   }
 })(app);
