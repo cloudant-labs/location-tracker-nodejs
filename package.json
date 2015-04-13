@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "./app.js db put && ./app.js api set_permissions",
-    "start": "./app.js"
+    "prepublish": "./admin.js db put && ./admin.js api set_permissions",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
