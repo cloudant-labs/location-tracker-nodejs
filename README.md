@@ -32,6 +32,8 @@ Once you have completed the above steps, simply:
 
     $ cf push
 
+**Note:** You may notice that Bluemix assigns a URL to your app containing a random word. This is defined by the `manifest.yml` file. The `host` key in this file contains the value `cloudant-location-tracker-${random-word}`. The random word is there to ensure that multiple people deploying the Location Tracker application to Bluemix do not run into naming collisions. However, this will cause a new route to be created for your application each time you deploy to Bluemix. To prevent this from happening, replace `${random-word}` with a hard coded (but unique) value.
+
 ## Configuring
 
 ### Development
