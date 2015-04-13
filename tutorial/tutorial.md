@@ -57,9 +57,11 @@ You should now be able to access the application at [`http://localhost:5000`](ht
 
 ### Deploying to IBM Bluemix
 
-Let's jump to deploying to Bluemix, and then come back to getting the application running locally. The first step is to [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. I'll wait.
+Let's jump to deploying to Bluemix, and then come back to getting the application running locally. The first step is to [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. I'll wait. Next, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
 
-Next, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to connect to Bluemix and then to log in to Bluemix. Don't deploy to Bluemix quite yet, we've got one more thing we need to do first (if you do accidentally deploy to Bluemix at this point, that's not a problem).
+1. Connect to Bluemix using the `cf api` command
+2. Log in to Bluemix using the `cf login` command
+3. Do _not_ deploy to Bluemix quite yet, we've got one more thing we need to do first (if you do accidentally deploy to Bluemix at this point, that's not a problem)
 
 The next step is to create a Cloudant service within Bluemix. This only needs to be done once. You can either do this at the command line, or in the Bluemix dashboard. If you prefer to use the command line:
 
