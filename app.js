@@ -43,9 +43,13 @@ program
   .description('Create (put) or delete the database')
   .action(function(method, options) {
     createServer = false;
+    var cloudant = app.get('cloudant-location-tracker-db');
+    if (!cloudant) {
+      console.error('No database configured');
+      return;
+    }
     switch (method) {
       case 'put':
-        var cloudant = app.get('cloudant-location-tracker-db');
         cloudant.db.create('location-tracker', function(err, body) {
           if (!err) {
             console.log('Location tracker database created');
@@ -65,7 +69,7 @@ program
             }
           }
         });
-        app.get('cloudant-location-tracker-db').db.create('users', function(err, body) {
+        cloudant.db.create('users', function(err, body) {
           if (!err) {
             console.log('Users database created');
           } else {
@@ -78,7 +82,7 @@ program
         });
         break;
       case 'delete':
-        app.get('cloudant-location-tracker-db').db.destroy('location-tracker', function(err, body) {
+        cloudant.db.destroy('location-tracker', function(err, body) {
           if (!err) {
             console.log('Database deleted');
           } else {
@@ -89,7 +93,7 @@ program
             }
           }
         });
-        app.get('cloudant-location-tracker-db').db.destroy('users', function(err, body) {
+        cloudant.db.destroy('users', function(err, body) {
           if (!err) {
             console.log('Users database deleted');
           } else {
@@ -115,9 +119,14 @@ program
   .description('Call an API endpoint with preconfigured settings')
   .action(function(endpoint, options) {
     createServer = false;
+    var cloudant = app.get('cloudant-location-tracker-db');
+    if (!cloudant) {
+      console.error('No database configured');
+      return;
+    }
     switch (endpoint) {
       case 'set_permissions':
-        app.get('cloudant-location-tracker-db').set_permissions({
+        cloudant.set_permissions({
           database: 'location-tracker',
           username: 'nobody',
           roles: ['_reader']
