@@ -61,9 +61,26 @@ Services created within Bluemix are automatically added to the `VCAP_SERVICES` e
 
 ### Running Locally
 
+#### Configuring
+
+Configuration of your local development environment is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
+
+    VCAP_SERVICES={"cloudantNoSQLDB": [{"name": "cloudant-location-tracker-db","label": "cloudantNoSQLDB","plan": "Shared","credentials": {"username": "your-username","password": "your-password","host": "your-host","port": 443,"url": "https://your-username:your-password@your-host"}}]}
+
+You have two options for configuring the database to be used by your local development environment:
+
+1. Install the [CouchDB 2.0 Developer Preview](https://couchdb.apache.org/developer-preview/2.0/) on your local development machine and configure the `VCAP_SERVICES` environment variable accordingly.
+2. Simply point your local installation to your Cloudant database on Bluemix. This isn't ideal, as both your development and production environments will be using the same database.
+
+If you want to try the second option: 
+
+1. Click "Show Credentials" on your "Cloudant NoSQL DB" service within the Bluemix dashboard
+2. Copy the JSON object displayed
+3. Paste the JSON object into your `.env` file as the value for the `VCAP_SERVICES` environment variable, removing all of the line breaks
+
 #### Installing
 
-If you want to run the Location Tracker application in your local development environment, you'll first need to [download and install Node.js](https://nodejs.org/download/), if you haven't already. The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
+[Download and install Node.js](https://nodejs.org/download/), if you haven't already. The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
 
 ```json
 {
@@ -82,41 +99,12 @@ Install the application's dependencies using npm:
 
     $ npm install
 
-Note that the installation will not be complete, as we don't have a database configured yet. We'll come back to this.
+In addition to installing the application's dependencies, this command also runs scripts that create and configure databases needed by the application.
 
 #### Running
 
-To run the project locally you will first need to install [Foreman](https://github.com/ddollar/foreman). Then, you can start up the application with the following command:
+Install [Foreman](https://github.com/ddollar/foreman) and then start the application with the following command:
 
     $ foreman start
 
-You should now be able to access the application at [`http://localhost:5000`](http://localhost:5000). Note that parts of the application will fail as there is no database configured yet. Again, we'll come back to this.
-
-#### Configuring
-
-Configuration of your local development environment is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
-
-    VCAP_SERVICES={"cloudantNoSQLDB": [{"name": "cloudant-location-tracker-db","label": "cloudantNoSQLDB","plan": "Shared","credentials": {"username": "your-username","password": "your-password","host": "your-host","port": 443,"url": "https://your-username:your-password@your-host"}}]}
-
-You have two options for configuring the database to be used by your local development environment:
-
-1. Install the [CouchDB 2.0 Developer Preview](https://couchdb.apache.org/developer-preview/2.0/) on your local development machine and configure the `VCAP_SERVICES` environment variable accordingly.
-2. Simply point your local installation to your Cloudant database on Bluemix. This isn't ideal, as both your development and production environments will be using the same database.
-
-If you want to try the second option: 
-
-1. Click "Show Credentials" on your "Cloudant NoSQL DB" service within the Bluemix dashboard
-2. Copy the JSON object displayed
-3. Paste the JSON object into your `.env` file as the value for the `VCAP_SERVICES` environment variable, removing all of the line breaks
-
-Once you have a database configured, be sure to install the application's dependencies again using npm:
-
-    $ npm install
-
-In addition to installing the application's dependencies, this command also runs scripts that create and configure databases needed by the application.
-
-Go ahead and start up the application again:
-
-    $ foreman start
-
-Open your local application instance at [`http://localhost:5000`](http://localhost:5000). Now that you have a local database configured, everything should work correctly.
+You should now be able to access the application at [`http://localhost:5000`](http://localhost:5000). You now have an instance of the Location Tracker application running in your local development environment.
