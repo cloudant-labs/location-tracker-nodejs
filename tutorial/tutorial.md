@@ -12,9 +12,11 @@ Let's take managing user access, for example. How would you go about building a 
 
 ## Quick Start
 
-If you're interested in learning all the steps needed to build this application, and want to explore all of the intricacies, then skip this section. This Quick Start section is for those who want to just get the code up-and-running as quickly as possible. Most of the instructions you'll need for this are in the [README that accompanies the application source code](https://github.com/cloudant-labs/location-tracker-nodejs). However, this Quick Start explains things in a bit more detail.
+If you're interested in learning all the steps needed to build this application, and want to explore all of the intricacies, then skip this section. This Quick Start section is for those who want to just get the code up-and-running as quickly as possible. Most of the instructions you'll need for this are in the [README that accompanies the application source code](https://github.com/cloudant-labs/location-tracker-nodejs). However, this Quick Start explains things in a bit more detail and breaks the steps down into separate [Deploying to IBM Bluemix](#deploying-to-ibm-bluemix) and [Running Locally](#running-locally) sections.
 
-### Installing
+### Deploying to IBM Bluemix
+
+#### Cloning
 
 The first step is to clone the project from GitHub:
 
@@ -24,40 +26,9 @@ After cloning, you will have a new `location-tracker-nodejs` directory. Change i
 
     $ cd location-tracker-nodejs
 
-**Note:** If you don't care about running the Location Tracker application locally on your development machine, you can skip to the [Deploying to IBM Bluemix](#deploying-to-ibm-bluemix) section. Otherwise, keep reading.
+#### Deploying
 
-Next you'll need to [download and install Node.js](https://nodejs.org/download/), if you haven't already. The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
-
-```json
-{
-  "dependencies": {
-    "body-parser": "^1.11.0",
-    "cloudant": "^1.0.0-beta3",
-    "commander": "^2.6.0",
-    "dotenv": "^0.5.1",
-    "express": "^4.11.1",
-    "http-proxy": "^1.8.1"
-  }
-}
-```
-
-Install the application's dependencies using npm:
-
-    $ npm install
-
-Note that the installation will not be complete, as we don't have a database configured yet. We'll come back to this.
-
-### Running
-
-To run the project locally you will first need to install [Foreman](https://github.com/ddollar/foreman). Then, you can start up the application with the following command:
-
-    $ foreman start
-
-You should now be able to access the application at [`http://localhost:5000`](http://localhost:5000). Note that parts of the application will fail as there is no database configured yet. Again, we'll come back to this.
-
-### Deploying to IBM Bluemix
-
-Let's jump to deploying to Bluemix, and then come back to getting the application running locally. The first step is to [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. I'll wait. Next, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
+Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. I'll wait. Then, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
 
 1. Connect to Bluemix using the `cf api` command
 2. Log in to Bluemix using the `cf login` command
@@ -82,11 +53,46 @@ You are now ready to deploy your application! Deploying is as simple as:
 
 From now on, you will only need to use this one command whenever you want to deploy changes to your application. In the [Bluemix dashboard](https://console.ng.bluemix.net/), find the "cloudant-location-tracker" app. Look for "Routes" and find the route assigned to your app. Note that the route does not use SSL by default. I recommend changing the `http` to `https` in the route URL, as the Location Tracker app collects user credentials. Go ahead and visit this URL to see your newly deployed app!
 
-**Note:** You may notice that Bluemix assigns a URL to your app containing a random word. This is defined by the [`manifest.yml`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/manifest.yml) file. The `host` key in this file contains the value `cloudant-location-tracker-${random-word}`. The random word is there to ensure that multiple people deploying the Location Tracker application to Bluemix do not run into naming collisions. However, this will cause a new route to be created for your application each time you deploy to Bluemix. To prevent this from happening, replace `${random-word}` with a hard coded (but unique) value.
+**Note:** You may notice that Bluemix assigns a route URL to your app containing a random word. This is defined by the [`manifest.yml`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/manifest.yml) file. The `host` key in this file contains the value `cloudant-location-tracker-${random-word}`. The random word is there to ensure that multiple people deploying the Location Tracker application to Bluemix do not run into naming collisions. However, this will cause a new route to be created for your application each time you deploy to Bluemix. To prevent this from happening, replace `${random-word}` with a hard coded (but unique) value.
 
-### Configuring
+#### Configuring
 
-#### Development
+Services created within Bluemix are automatically added to the `VCAP_SERVICES` environment variable for your app on Bluemix. Therefore, no further configuration is needed. You now have a fully-functioning Location Tracker application deployed to Bluemix!
+
+### Running Locally
+
+#### Installing
+
+If you want to run the Location Tracker application in your local development environment, you'll first need to [download and install Node.js](https://nodejs.org/download/), if you haven't already. The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
+
+```json
+{
+  "dependencies": {
+    "body-parser": "^1.11.0",
+    "cloudant": "^1.0.0-beta3",
+    "commander": "^2.6.0",
+    "dotenv": "^0.5.1",
+    "express": "^4.11.1",
+    "http-proxy": "^1.8.1"
+  }
+}
+```
+
+Install the application's dependencies using npm:
+
+    $ npm install
+
+Note that the installation will not be complete, as we don't have a database configured yet. We'll come back to this.
+
+#### Running
+
+To run the project locally you will first need to install [Foreman](https://github.com/ddollar/foreman). Then, you can start up the application with the following command:
+
+    $ foreman start
+
+You should now be able to access the application at [`http://localhost:5000`](http://localhost:5000). Note that parts of the application will fail as there is no database configured yet. Again, we'll come back to this.
+
+#### Configuring
 
 Configuration of your local development environment is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
 
@@ -114,10 +120,3 @@ Go ahead and start up the application again:
     $ foreman start
 
 Open your local application instance at [`http://localhost:5000`](http://localhost:5000). Now that you have a local database configured, everything should work correctly.
-
-#### Production
-
-Services created within Bluemix are automatically added to the `VCAP_SERVICES` environment variable for your app on Bluemix. Therefore, no further configuration is needed.
-
-
-
