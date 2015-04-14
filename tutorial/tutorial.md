@@ -26,7 +26,7 @@ After cloning, you will have a new `location-tracker-nodejs` directory. Change i
 
     $ cd location-tracker-nodejs
 
-#### Deploying
+#### Configuring
 
 Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. I'll wait. Then, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
 
@@ -47,6 +47,8 @@ If you instead prefer to use the [Bluemix dashboard](https://console.ng.bluemix.
 5. Enter "cloudant-location-tracker-db" in the "Service name" field
 6. Click the "Create" button
 
+#### Deploying
+
 You are now ready to deploy your application! Deploying is as simple as:
 
     $ cf push
@@ -54,10 +56,6 @@ You are now ready to deploy your application! Deploying is as simple as:
 From now on, you will only need to use this one command whenever you want to deploy changes to your application. In the [Bluemix dashboard](https://console.ng.bluemix.net/), find the "cloudant-location-tracker" app. Look for "Routes" and find the route assigned to your app. Note that the route does not use SSL by default. I recommend changing the `http` to `https` in the route URL, as the Location Tracker app collects user credentials. Go ahead and visit this URL to see your newly deployed app!
 
 **Note:** You may notice that Bluemix assigns a route URL to your app containing a random word. This is defined by the [`manifest.yml`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/manifest.yml) file. The `host` key in this file contains the value `cloudant-location-tracker-${random-word}`. The random word is there to ensure that multiple people deploying the Location Tracker application to Bluemix do not run into naming collisions. However, this will cause a new route to be created for your application each time you deploy to Bluemix. To prevent this from happening, replace `${random-word}` with a hard coded (but unique) value.
-
-#### Configuring
-
-Services created within Bluemix are automatically added to the `VCAP_SERVICES` environment variable for your app on Bluemix. Therefore, no further configuration is needed. You now have a fully-functioning Location Tracker application deployed to Bluemix!
 
 ### Running Locally
 
