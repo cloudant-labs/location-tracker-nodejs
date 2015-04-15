@@ -115,6 +115,20 @@ a, a:hover, a:active {
 pre {
     margin-bottom: 20px;
 }
+.user-item{
+    position: relative;
+    display: block;
+    background-color: #3a8cc0;
+    color: white;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+.user-item:hover{
+    background-color: #F3622D;
+}
+
 /* WELCOME PAGE*/
 
 .content-table {
@@ -368,6 +382,10 @@ pre {
 }
 /* Leaflet Control Overrides */
 
+.leaflet-control-container.right {
+    position: absolute;
+    top: 134px;
+}
 .leaflet-control-container .leaflet-control-locate a {
     margin-left: 0px;
 }
@@ -417,10 +435,9 @@ pre {
     color: #999;
     line-height: 1.6;
 }
-
 /* login form */
 
-.form-container{
+.form-container {
     display: block;
     position: relative;
     width: 340px;
@@ -429,27 +446,23 @@ pre {
     text-align: center;
     margin-top: -120px;
 }
-
 .form-1 {
     width: 320px;
     margin: 0px auto;
     padding: 10px;
     position: relative;
 }
-
 .form-1 .field {
-    position: relative; /* For the icon positioning */
+    position: relative;
+    /* For the icon positioning */
 }
-
-
-.form-1 input[type=text],
-.form-1 input[type=password] {
+.form-1 input[type=text], .form-1 input[type=password] {
     font-size: 20px;
     font-weight: 400;
     width: 100%;
     padding: 12px 20px;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.1), inset 0 3px 2px rgba(0,0,0,0.1);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1), inset 0 3px 2px rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     background: white;
     color: #222b33;
@@ -458,29 +471,21 @@ pre {
     -o-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
 }
-
 .form-1 input[type=text] {
     margin-bottom: 10px;
 }
-
-.form-1 input[type=text]:hover ~ i,
-.form-1 input[type=password]:hover ~ i {
+.form-1 input[type=text]:hover ~ i, .form-1 input[type=password]:hover ~ i {
     color: #52cfeb;
 }
-
-.form-1 input[type=text]:focus ~ i,
-.form-1 input[type=password]:focus ~ i {
+.form-1 input[type=text]:focus ~ i, .form-1 input[type=password]:focus ~ i {
     color: #42A2BC;
 }
-
-.form-1 input[type=text]:focus,
-.form-1 input[type=password]:focus,
-.form-1 button[type=submit]:focus {
+.form-1 input[type=text]:focus, .form-1 input[type=password]:focus, .form-1 button[type=submit]:focus {
     outline: none;
 }
-
 .form-1 .submit {
     /* Size and position */
+    
     width: 65px;
     height: 65px;
     position: absolute;
@@ -488,71 +493,228 @@ pre {
     right: -25px;
     padding: 10px;
     z-index: 2;
-
     /* Styles */
+    
     background: #ffffff;
     border-radius: 50%;
-    box-shadow: 
-        0 0 2px rgba(0,0,0,0.1),
-        0 3px 2px rgba(0,0,0,0.1),
-        inset 0 -3px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1), 0 3px 2px rgba(0, 0, 0, 0.1), inset 0 -3px 2px rgba(0, 0, 0, 0.2);
 }
-
 .form-1 .submit:after {
     /* Size and position */
+    
     content: "";
     width: 10px;
     height: 10px;
     position: absolute;
     top: -2px;
     left: 30px;
-
     /* Styles */
-    background: #ffffff;
     
+    background: #ffffff;
     /* Other masks trick */
+    
     box-shadow: 0 62px white, -32px 31px white;
 }
-
 .form-1 button {
     /* Size and position */
+    
     width: 100%;
     height: 100%;
     margin-top: -1px;
-
     /* Icon styles */
+    
     font-size: 1.4em;
     line-height: 1.75;
     color: white;
-
     /* Styles */
-    border: none; /* Remove the default border */
+    
+    border: none;
+    /* Remove the default border */
+    
     border-radius: inherit;
     background: linear-gradient(#52cfeb, #42A2BC);
-    box-shadow: 
-        inset 0 1px 0 rgba(255,255,255,0.3),
-        0 1px 2px rgba(0,0,0,0.35),
-        inset 0 3px 2px rgba(255,255,255,0.2),
-        inset 0 -3px 2px rgba(0,0,0,0.1);
-
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 3px 2px rgba(255, 255, 255, 0.2), inset 0 -3px 2px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
-
-.form-1 button:hover,
-.form-1 button[type=submit]:focus {
+.form-1 button:hover, .form-1 button[type=submit]:focus {
     background: #52cfeb;
     transition: all 0.3s ease-out;
 }
-
 .form-1 button:active {
     background: #42A2BC;
-    box-shadow: 
-        inset 0 0 5px rgba(0,0,0,0.3),
-        inset 0 3px 4px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3), inset 0 3px 4px rgba(0, 0, 0, 0.3);
+}
+/* CLICK BLOCKER */
+
+.click-blocker {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: rgba(44, 62, 80, 0.9);
+    z-index: 1000;
+}
+/* MULTI USER MODAL */
+
+.modal-active body {
+    -webkit-transform: scale( 0.9);
+    -moz-transform: scale( 0.9);
+    -ms-transform: scale( 0.9);
+    -o-transform: scale( 0.9);
+    transform: scale( 0.9);
+}
+.modal-cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    visibility: hidden;
+    opacity: 0;
+    background: rgba( 0, 0, 0, 0.5);
+}
+.modal-active .modal-cover {
+    visibility: visible;
+    opacity: 1;
+}
+.modal-contents {
+    position: relative;
+    padding: 20px;
+    max-width: 400px;
+    height: 100%;
+    margin: auto;
+}
+.modal-active .modal-contents {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+}
+.no-blur.modal-active .modal-contents {
+    -webkit-filter: none;
+    -moz-filter: none;
+    -ms-filter: none;
+    -o-filter: none;
+    filter: none;
+}
+.modal-popup {
+    z-index: 1000;
+    position: absolute;
+    width: 340px;
+    height: 100%;
+    left: 50%;
+    top: 0px;
+    margin: 0 0 0 -170px;
+    visibility: visible;
+    opacity: 1;
+    padding: 72px 0px 0;
+    background: white;
+    border-radius: 4px;
+    /*border: 1px solid #196090;*/
+    box-shadow: 0px 0px 20px rgba( 0, 0, 0, 0.6);
+    border-radius: 3px;
+    -webkit-transform: scale( 0.8);
+    -moz-transform: scale( 0.8);
+    -ms-transform: scale( 0.8);
+    -o-transform: scale( 0.8);
+    transform: scale( 0.8);
+}
+.modal-popup h2 {
+    margin: 0;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+    position: absolute;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 20px 20px 20px 32px;
+    background-color: white;//#222b33;
+    font-size: 20px;
+    font-weight: 400;
+    color: #666;
 }
 
+.modal-popup .scroll-y-area{
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin: 0;
+    padding: 0;
+    height: inherit;
+    display: block;
+    overflow: scroll;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
 
-
+.modal-popup ul {
+    margin: 0;
+    padding: 0;
+}
+.modal-popup ul li {
+    display: block;
+    position: relative;
+    list-style-type: none;
+    margin: 0;
+    color: white;
+    padding: 10px 20px 10px 40px;
+    border-top: 1px solid #196090;
+    font-weight: 200;
+    font-size: 20px;
+}
+.modal-popup ul li span.color {
+    height: 20px;
+    width: 20px;
+    display: block;
+    position: absolute;
+    border-radius: 20px;
+    border: 2px solid white;
+    left: 12px;
+    top: 13px;
+}
+.modal-active .modal-popup-animate {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: scale( 1.1);
+    -moz-transform: scale( 1.1);
+    -ms-transform: scale( 1.1);
+    -o-transform: scale( 1.1);
+    transform: scale( 1.1);
+}
+.modal-popup.stack {
+    -webkit-transform: scale( 1.5);
+    -moz-transform: scale( 1.5);
+    -ms-transform: scale( 1.5);
+    -o-transform: scale( 1.5);
+    transform: scale( 1.5);
+}
+.modal-active .modal-popup.stack {
+    -webkit-transform: scale( 1.1);
+    -moz-transform: scale( 1.1);
+    -ms-transform: scale( 1.1);
+    -o-transform: scale( 1.1);
+    transform: scale( 1.1);
+}
+.modal-ready body, .modal-ready .modal-contents, .modal-ready .modal-popup, .modal-ready .modal-cover {
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+    -moz-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+    -ms-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+    -o-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+    transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+}
+.modal-ready .modal-popup.no-transition {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 /* Globe LOOP */
 
 @keyframes globeLoopAnim {
