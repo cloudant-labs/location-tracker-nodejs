@@ -1,7 +1,7 @@
 ---
 applications:
 - name: cloudant-location-tracker
-  memory: 64M
+  memory: 128M
   host: cloudant-location-tracker-${random-word}
   services:
   - cloudant-location-tracker-db
