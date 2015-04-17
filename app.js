@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Licensed under the Apache 2.0 License. See footer for details.
 
 var express = require('express'),
