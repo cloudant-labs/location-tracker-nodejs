@@ -71,7 +71,40 @@ module.exports.postSession = function(req, res) {
       decryptedApiPassword += decipher.final('utf8');
       cloudant.auth(body.api_key, decryptedApiPassword, function(err, body, headers) {
         if (!err) {
-          res.setHeader("Set-Cookie", headers['set-cookie']);
+          // TODO: This is a hack to deal with running app locally
+          var cookieData = {};
+          var cookieKeyValues = headers['set-cookie'][0].split(';');
+          cookieKeyValues.map(function(keyValueString) {
+              var keyValue = keyValueString.trim().split('=');
+              cookieData[keyValue[0]] = keyValue[1];
+          });
+          var cookie = '';
+          for (var key in cookieData) {
+              switch (key) {
+                  case 'AuthSession':
+                      cookie += 'AuthSession=' + cookieData[key]
+                      break;
+                  case 'Version':
+                      cookie += '; Version=' + cookieData[key]
+                      break;
+                  case 'Expires':
+                      cookie += '; Expires=' + cookieData[key]
+                      break;
+                  case 'Max-Age':
+                      cookie += '; Max-Age=' + cookieData[key]
+                      break;
+                  case 'Path':
+                      cookie += '; Path=' + cookieData[key]
+                      break;
+                  case 'HttpOnly':
+                      cookie += '; HttpOnly'
+                      break;
+                  case 'Secure':
+                      // Intentionally not set
+                      break;
+              }
+          }
+          res.setHeader('Set-Cookie', cookie);
           res.json({
             ok: true,
             name: req.body.name,
