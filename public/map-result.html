@@ -2,6 +2,28 @@
     <div id="mapResult" class="result trans-step1">
         <!-- * -->
     </div>
+
+    <div class="leaflet-control-container right">
+        <div class="leaflet-top leaflet-left">
+            <div class="leaflet-control-zoom leaflet-bar leaflet-control">
+                <a class="leaflet-bar-part leaflet-bar-part-single multi-users" href="#" title="Show me where I am"><span class="fa fa-users"></span></a>
+            </div>
+        </div>
+    </div>
+
+
+<div class="click-blocker"><!-- * --></div>
+
+    <div id="multi-user-popup" class="modal-popup modal-popup-animate">
+        <h2>Load other user paths</h2>
+        <div class="scroll-y-area">
+        <ul>
+            <a href=# class="user-item" ng-repeat="item in names"><li >
+                <span class="color" style="background-color:{{item.color}}"></span>{{item.name}}</li></a>
+        </ul>
+        </div>
+    </div>
+
     <div class="button-bottom trans-button">
 
         <a href="#tracking" class="btn btn-block btn-primary">
@@ -10,6 +32,7 @@
         <a ng-click="signOut()" class="btn btn-block btn-primary">
             Sign Out
         </a>
+        <a class="leaflet-bar-part leaflet-bar-part-single" href="#" title="Show me where I am"><span class="fa-user fa"></span></a>
 
     </div>
 </div>

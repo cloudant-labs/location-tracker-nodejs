@@ -225,42 +225,6 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             }).on('stopfollowing', function() {
                 mapTracker.off('dragstart', lc._stopFollowing, lc);
             });
-
-            Colors.random = function() {
-                var result;
-                var count = 0;
-                for (var prop in this.names)
-                    if (Math.random() < 1 / ++count)
-                        result = prop;
-                return result;
-            };
-
-
-            var names = ['Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai'];
-            var userList = [];
-
-            for (var i = names.length - 1; i >= 0; i--) {
-                userList.push({
-                    name: names[i],
-                    color: Colors.random()
-                });
-            };
-
-            $scope.names = userList;
-
-            $scope.$apply();
-
-            console.log($scope.names);
-
-            $('a.multi-users').on("click", function(event) {
-                // $(this)
-                event.preventDefault();
-                console.log("yo");
-            });
-
-
-
-
         } else {
             alert("Geolocation IS NOT available!");
         }
@@ -420,7 +384,6 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
     $scope.transLeave = function() {};
 })
 
-
 .controller('mapResultController', function($scope, $location, pouchResult, authService) {
     var mapResult = {};
 
@@ -428,6 +391,37 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
     $scope.transEnter = function() {
         var db = pouchResult;
         var _len;
+
+        Colors.random = function() {
+            var result;
+            var count = 0;
+            for (var prop in this.names)
+                if (Math.random() < 1 / ++count)
+                    result = prop;
+            return result;
+        };
+
+        var names = ['Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai'];
+        var userList = [];
+
+        for (var i = names.length - 1; i >= 0; i--) {
+            userList.push({
+                name: names[i],
+                color: Colors.random()
+            });
+        };
+
+        $scope.names = userList;
+
+        $scope.$apply();
+
+        console.log($scope.names);
+
+        $('a.multi-users').on("click", function(event) {
+            // $(this)
+            event.preventDefault();
+           console.log("yo");
+        });
 
         // get the length of docs and store it in _len
         db.info(function(err, info) {
