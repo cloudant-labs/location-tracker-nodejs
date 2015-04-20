@@ -426,25 +426,39 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             $scope.names = userList;
             $scope.$apply();
             $('a.multi-users').on("click", function(event) {
-                // $(this)
                 event.preventDefault();
-                console.log("yo");
+                var username = $(this).text();
+                // TODO: Improve how this is done
+                if (!username ) {
+                    authService.getSession();
+                    username = authService.username;
+                    console.log(username);
+                    $scope.$on('auth:updated', function() {
+                        $scope.$apply(function() {
+                            username = authService.username;
+                            console.log(username);
+                        });
+                    });
+                }
+
+                // use Cloudant query to get results for a given user, then a run a loop to draw on the map
+                // TODO: Handle error
+                db.find({
+                    selector: {'properties.username': {'$eq': username}},
+                }).then(function (result) {
+                    result.docs.map(function(doc) {
+                        updateMovingLayer(doc);
+                    });
+                    $('.click-blocker').velocity({
+                        opacity: 0,
+                        translateY: "-100%"
+                    });
+                    $('#multi-user-popup').velocity({
+                        opacity: 0,
+                        translateY: "-100%"
+                    });
+                });
             });
-        });
-
-        // get the length of docs and store it in _len
-        db.info(function(err, info) {
-            _len = info.doc_count;
-        });
-
-        // use Cloudant query to get results by user, then a run a loop to draw on the map
-        // TODO: Handle error
-        db.find({
-            selector: {'properties.username': {'$gte': ''}},
-        }).then(function (result) {
-            for (var i = 0; i < _len - 1; i++) {
-                updateMovingLayer(result.docs[i]);
-            };
         });
 
         /* instantiate Leaflet map */
