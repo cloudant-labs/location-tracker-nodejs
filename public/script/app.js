@@ -406,13 +406,13 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             selector: {'properties.username': {'$gte': ''}}
         }).then(function (result) {
             var usernames = {};
-            result.docs.map(function(item) {
+            result.docs.map(function(doc) {
                 //TODO: Use a group_level query for this
-                if (item.properties && item.properties.username) {
-                    if (usernames[item.properties.username]) {
-                        usernames[item.properties.username]++;
+                if (doc.properties && doc.properties.username) {
+                    if (usernames[doc.properties.username]) {
+                        usernames[doc.properties.username]++;
                     } else {
-                        usernames[item.properties.username] = 1;
+                        usernames[doc.properties.username] = 1;
                     }
                 }
             });
