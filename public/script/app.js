@@ -429,16 +429,10 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                 event.preventDefault();
                 var username = $(this).text();
                 // TODO: Improve how this is done
-                if (!username ) {
-                    authService.getSession();
-                    username = authService.username;
-                    console.log(username);
-                    $scope.$on('auth:updated', function() {
-                        $scope.$apply(function() {
-                            username = authService.username;
-                            console.log(username);
-                        });
-                    });
+                if (!username) {
+                    $('#multi-user-popup').show();
+                    $('.click-blocker').show();
+                    return;
                 }
 
                 // use Cloudant query to get results for a given user, then a run a loop to draw on the map
@@ -449,14 +443,8 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                     result.docs.map(function(doc) {
                         updateMovingLayer(doc);
                     });
-                    $('.click-blocker').velocity({
-                        opacity: 0,
-                        translateY: "-100%"
-                    });
-                    $('#multi-user-popup').velocity({
-                        opacity: 0,
-                        translateY: "-100%"
-                    });
+                    $('.click-blocker').hide();
+                    $('#multi-user-popup').hide();
                 });
             });
         });
