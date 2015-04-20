@@ -401,26 +401,35 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             return result;
         };
 
-        var names = ['Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai, Jani', 'Hege', 'Kai'];
-        var userList = [];
-
-        for (var i = names.length - 1; i >= 0; i--) {
-            userList.push({
-                name: names[i],
-                color: Colors.random()
+        // TODO: Handle error
+        db.find({
+            selector: {'properties.username': {'$gte': ''}}
+        }).then(function (result) {
+            var usernames = {};
+            result.docs.map(function(item) {
+                //TODO: Use a group_level query for this
+                if (item.properties && item.properties.username) {
+                    if (usernames[item.properties.username]) {
+                        usernames[item.properties.username]++;
+                    } else {
+                        usernames[item.properties.username] = 1;
+                    }
+                }
             });
-        };
-
-        $scope.names = userList;
-
-        $scope.$apply();
-
-        console.log($scope.names);
-
-        $('a.multi-users').on("click", function(event) {
-            // $(this)
-            event.preventDefault();
-           console.log("yo");
+            var userList = [];
+            for (var username in usernames) {
+                userList.push({
+                    name: username,
+                    color: Colors.random()
+                });
+            }
+            $scope.names = userList;
+            $scope.$apply();
+            $('a.multi-users').on("click", function(event) {
+                // $(this)
+                event.preventDefault();
+                console.log("yo");
+            });
         });
 
         // get the length of docs and store it in _len
