@@ -287,8 +287,8 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             }
         };
 
-        /* PUT object to db */
-        db.put(coord, position.timestamp.toString(), function callback(err, response) {
+        /* POST object to db */
+        db.post(coord, function callback(err, response) {
             if (err) {
                 alert('PUT ERROR: ' + err);
             }
