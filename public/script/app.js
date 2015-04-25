@@ -385,7 +385,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
 })
 
 .controller('mapResultController', function($scope, $location, pouchResult, authService) {
-    var mapResult = {};
+    var mapResult;
 
     /* triggered from velocity callback within the animation module `enter` hook */
     $scope.transEnter = function() {
@@ -440,8 +440,9 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                 db.find({
                     selector: {'properties.username': {'$eq': username}},
                 }).then(function (result) {
+                    movementLayer = instantiateLeafletMap();
                     result.docs.map(function(doc) {
-                        updateMovingLayer(doc);
+                        updateMovingLayer(doc, movementLayer);
                     });
                     $('.click-blocker').hide();
                     $('#multi-user-popup').hide();
@@ -449,65 +450,70 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
             });
         });
 
-        /* instantiate Leaflet map */
-        mapResult = new L.Map('mapResult');
+        function instantiateLeafletMap() {
+            if (!mapResult) {
+                /* instantiate Leaflet map */
+                mapResult = new L.Map('mapResult');
+            }
 
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-            maxZoom: 20,
-            attribution: 'Map data &copy; ' +
-                '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-            detectRetina: true,
-            id: 'examples.map-20v6611k'
-        }).addTo(mapResult);
+            L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+                maxZoom: 20,
+                attribution: 'Map data &copy; ' +
+                    '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+                detectRetina: true,
+                id: 'examples.map-20v6611k'
+            }).addTo(mapResult);
 
-        var last_lat = 0;
-        var last_lon = 0;
+            var last_lat = 0;
+            var last_lon = 0;
 
-        var movementLayer = L.geoJson(null, {
-            pointToLayer: function(feature, latlng) {
+            var movementLayer = L.geoJson(null, {
+                pointToLayer: function(feature, latlng) {
 
-                // setup a default lat + lng coordinate
-                if (last_lat == 0) {
+                    // setup a default lat + lng coordinate
+                    if (last_lat == 0) {
+                        last_lat = latlng.lat;
+                        last_lon = latlng.lng;
+                    }
+
+                    // we store coordinates so that we can have a start and end point, or pointA and pointB
+                    var pointA = [last_lat, last_lon];
+                    var pointB = [latlng.lat, latlng.lng];
+                    var pointList = [pointA, pointB];
+
                     last_lat = latlng.lat;
                     last_lon = latlng.lng;
+
+                    var firstpolyline = new L.Polyline(pointList, {
+                        color: '#e5603d',
+                        weight: 4,
+                        opacity: 0.64,
+                        smoothFactor: 1
+                    });
+                    firstpolyline.addTo(mapResult);
+
+                    markeroptions = {
+                        icon: L.icon({
+                            iconUrl: 'script/images/marker-icon-blue.png',
+                            iconRetinaUrl: 'script/images/marker-icon-blue-2x.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [10, 10],
+                            shadowURL: 'script/images/marker-icon-shadow.png',
+                            shadowRetinaURL: 'script/images/marker-icon-shadow-2x.png',
+                            shadowSize: [41, 41],
+                            shadowAnchor: [10, 10]
+                        })
+                    }
+                    return L.marker(latlng, markeroptions).bindPopup(
+                        '<span>Latitude&nbsp;&nbsp;</span>' + latlng.lat +
+                        '<br><span>Longitude&nbsp;&nbsp;</span>' + latlng.lng);
                 }
+            }).addTo(mapResult);
+            return movementLayer;
+        }
 
-                // we store coordinates so that we can have a start and end point, or pointA and pointB 
-                var pointA = [last_lat, last_lon];
-                var pointB = [latlng.lat, latlng.lng];
-                var pointList = [pointA, pointB];
-
-                last_lat = latlng.lat;
-                last_lon = latlng.lng;
-
-                var firstpolyline = new L.Polyline(pointList, {
-                    color: '#e5603d',
-                    weight: 4,
-                    opacity: 0.64,
-                    smoothFactor: 1
-                });
-                firstpolyline.addTo(mapResult);
-
-                markeroptions = {
-                    icon: L.icon({
-                        iconUrl: 'script/images/marker-icon-blue.png',
-                        iconRetinaUrl: 'script/images/marker-icon-blue-2x.png',
-                        iconSize: [25, 41],
-                        iconAnchor: [10, 10],
-                        shadowURL: 'script/images/marker-icon-shadow.png',
-                        shadowRetinaURL: 'script/images/marker-icon-shadow-2x.png',
-                        shadowSize: [41, 41],
-                        shadowAnchor: [10, 10]
-                    })
-                }
-                return L.marker(latlng, markeroptions).bindPopup(
-                    '<span>Latitude&nbsp;&nbsp;</span>' + latlng.lat +
-                    '<br><span>Longitude&nbsp;&nbsp;</span>' + latlng.lng);
-            }
-        }).addTo(mapResult);
-
-        function updateMovingLayer(doc) {
+        function updateMovingLayer(doc, movementLayer) {
             movementLayer.addData(doc);
             mapResult.fitBounds(movementLayer.getBounds());
         }
