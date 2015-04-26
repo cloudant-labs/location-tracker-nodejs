@@ -120,6 +120,59 @@ module.exports.postSession = function(req, res) {
   });
 };
 
+module.exports.getSession = function(req, res) {
+  var app = req.app;
+  var cloudant = app.get('cloudant-location-tracker-db');
+  if (!cloudant) {
+    return res.status(500).json({ error: 'No database server configured' })
+  }
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+  if (!req.cookies.AuthSession) {
+    //TODO: Better return status here
+    return res.status(500).json({error: 'Internal Server Error'});
+  }
+  var vcapServices = app.get('vcapServices');
+  if (!(vcapServices.cloudantNoSQLDB && vcapServices.cloudantNoSQLDB.length > 0)) {
+    return res.status(500).json({error: 'No VCAP_SERVICES configured'});
+  }
+  var service = vcapServices.cloudantNoSQLDB[0];
+  if (!service.credentials) {
+    return res.status(500).json({error: 'No service credentials configured'});
+  }
+  var cookieCloudant = require('cloudant')({
+    cookie: 'AuthSession=' + req.cookies.AuthSession,
+    account: service.credentials.username
+  });
+  var usersDb = cloudant.use('users');
+  cookieCloudant.session(function(err, body) {
+    if (!err) {
+      usersDb.find({
+        selector: {
+          api_key: body.userCtx.name
+        },
+        fields: [
+          'name'
+        ]
+      }, function(err, result) {
+        if (!err) {
+          if (result.docs.length > 0) {
+            body.userCtx.name = result.docs[0].name;
+            res.json(body);
+          } else {
+            res.status(404).json({error: 'Not Found'});
+          }
+        } else {
+          res.status(500).json({error: 'Internal Server Error'});
+        }
+      });
+    } else {
+      res.status(500).json({error: 'Internal Server Error'});
+    }
+  });
+};
+
 //-------------------------------------------------------------------------------
 // Copyright IBM Corp. 2015
 //

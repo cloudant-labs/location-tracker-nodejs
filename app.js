@@ -39,6 +39,8 @@ var jsonParser = bodyParser.json();
 app.put('/api/_users/:id', jsonParser, api.putUser);
 // Handle user login
 app.post('/api/_session', jsonParser, api.postSession);
+// Handle getting user session info
+app.get('/api/_session', jsonParser, api.getSession);
 // Proxy requests for `/api/` to the Cloudant database server
 var apiProxy = httpProxy.createProxyServer();
 app.all('/api/*', function(req, res) {
