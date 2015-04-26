@@ -20,6 +20,7 @@ app.use(cookieParser());
 (function(app) {
   if (process.env.VCAP_SERVICES) {
     var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
+    app.set('vcapServices', vcapServices);
     if (vcapServices.cloudantNoSQLDB && vcapServices.cloudantNoSQLDB.length > 0) {
       var service = vcapServices.cloudantNoSQLDB[0];
       if (service.credentials) {
