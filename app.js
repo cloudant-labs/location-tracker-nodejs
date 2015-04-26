@@ -1,6 +1,7 @@
 // Licensed under the Apache 2.0 License. See footer for details.
 
 var express = require('express'),
+    cookieParser = require('cookie-parser'),
     http = require('http'),
     path = require('path'),
     cloudant = require('cloudant'),
@@ -14,6 +15,7 @@ var express = require('express'),
 dotenv.load();
 
 var app = express();
+app.use(cookieParser());
 
 (function(app) {
   if (process.env.VCAP_SERVICES) {
