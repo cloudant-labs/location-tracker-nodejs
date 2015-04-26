@@ -76,6 +76,25 @@ program
                 }
               }
             });
+            var userApiKeyIndex = {
+              name: 'user-api_key',
+              type: 'json',
+              index: {
+                fields: ['api_key']
+              }
+            };
+            // TODO: Make this happen even if location tracker database already exists
+            cloudant.use('users').index(userApiKeyIndex, function(err, result) {
+              if (!err) {
+                console.log('User key index created');
+              } else {
+                if (412 == err.status_code) {
+                  console.log('User key index already exists');
+                } else {
+                  console.error('Error creating user key index');
+                }
+              }
+            });
           } else {
             if (412 == err.status_code) {
               console.log('Location tracker database already exists');
