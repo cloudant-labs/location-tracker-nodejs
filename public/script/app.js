@@ -498,7 +498,7 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                             iconUrl: 'script/images/marker-icon-blue.png',
                             iconRetinaUrl: 'script/images/marker-icon-blue-2x.png',
                             iconSize: [25, 41],
-                            iconAnchor: [10, 10],
+                            iconAnchor: [10, 41],
                             shadowURL: 'script/images/marker-icon-shadow.png',
                             shadowRetinaURL: 'script/images/marker-icon-shadow-2x.png',
                             shadowSize: [41, 41],
