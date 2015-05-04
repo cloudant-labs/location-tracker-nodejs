@@ -2,11 +2,14 @@
 // Licensed under the Apache 2.0 License. See footer for details.
 
 var express = require('express'),
+    http = require('http'),
     path = require('path'),
     cloudant = require('cloudant'),
     program = require('commander'),
     dotenv = require('dotenv'),
     pkg = require(path.join(__dirname, 'package.json'));
+
+http.post = require('http-post');
 
 dotenv.load();
 
@@ -180,11 +183,22 @@ program
   .description('Track application deployments')
   .action(function(options) {
     var vcapApplication = app.get('vcapApplication');
-    if (vcapApplication && vcapApplication.space_id) {
-      console.log('Application Name: ' + vcapApplication.application_name);
-      console.log('Application URIs: ' + vcapApplication.application_uris.join(', '));
-      console.log('Application Version: ' + vcapApplication.application_version);
-      console.log('Space ID: ' + vcapApplication.space_id);
+    if (vcapApplication) {
+      var event = {};
+      if (vcapApplication.application_name) {
+        event.application_name = vcapApplication.application_name;
+      }
+      if (vcapApplication.space_id) {
+        event.space_id = vcapApplication.space_id;
+      }
+      if (vcapApplication.application_version) {
+        event.application_version = vcapApplication.application_version;
+      }
+      if (vcapApplication.application_uris) {
+        event.application_uris = vcapApplication.application_uris;
+      }
+      // TODO: Make this work over HTTPS
+      http.post('http://deployment-tracker.mybluemix.net/', event);
     }
   }).on('--help', function() {
     console.log('  Examples:');
