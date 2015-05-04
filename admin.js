@@ -26,6 +26,10 @@ var app = express();
       }
     }
   }
+  if (process.env.VCAP_APPLICATION) {
+    var vcapApplication = JSON.parse(process.env.VCAP_APPLICATION);
+    app.set('vcapApplication', vcapApplication);
+  }
 })(app);
 
 program
