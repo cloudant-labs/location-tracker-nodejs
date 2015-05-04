@@ -175,6 +175,24 @@ program
     console.log();
   });
 
+program
+  .command('track')
+  .description('Track application deployments')
+  .action(function(options) {
+    var vcapApplication = app.get('vcapApplication');
+    if (vcapApplication && vcapApplication.space_id) {
+      console.log('Application Name: ' + vcapApplication.application_name);
+      console.log('Application URIs: ' + vcapApplication.application_uris.join(', '));
+      console.log('Application Version: ' + vcapApplication.application_version);
+      console.log('Space ID: ' + vcapApplication.space_id);
+    }
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ track');
+    console.log();
+  });
+
 program.parse(process.argv);
 
 //-------------------------------------------------------------------------------
