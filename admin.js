@@ -46,14 +46,6 @@ program
         cloudant.db.create('location-tracker', function(err, body) {
           if (!err) {
             console.log('Location tracker database created');
-            // TODO: Make this happen even if location tracker database already exists
-            cloudant.set_permissions({database:'location-tracker', username:'nobody', roles:['_reader']}, function(err, result) {
-              if (!err) {
-                console.log('Location tracker database is now world readable');
-              } else {
-                console.error('Error setting permissions on location tracker database');
-              }
-            });
             var userLocationIndex = {
               name: 'user-location',
               type: 'json',
@@ -165,9 +157,9 @@ program
           roles: ['_reader']
         }, function(err, result) {
           if (!err) {
-            console.log('Permissions set');
+            console.log('Location tracker database is now world readable');
           } else {
-            console.error('Error setting permission');
+            console.error('Error setting permissions on location tracker database');
           }
         });
         break;
