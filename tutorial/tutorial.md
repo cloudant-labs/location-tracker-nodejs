@@ -63,8 +63,8 @@ In the `declared-services` section, we define a Cloudant service (`cloudantNoSQL
 
 Every Bluemix application needs a _buildpack_, which will be used to build and run your application. In most cases, Bluemix will automatically detect the appropriate buildpack for your application. In the case of the Location Tracker application, Bluemix will use the Node.js buildpack. The Node.js buildpack will:
 
-1. Install the npm dependencies declared in `package.json`
-2. Run any scripts declared in `package.json`
+1. Build the application by installing the npm dependencies declared in `package.json`
+2. Execute any scripts declared in `package.json`
 3. Provide a Node.js runtime environment to start your application within
 
 ### Procfile
