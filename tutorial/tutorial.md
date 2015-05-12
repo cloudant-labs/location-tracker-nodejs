@@ -10,13 +10,9 @@ Let's take managing user access, for example. How would you go about building a 
 
 [![IBM Bluemix logo](http://upload.wikimedia.org/wikipedia/commons/c/c7/IBM_Bluemix_logo.svg "IBM Bluemix")](https://console.ng.bluemix.net/)
 
-## Quick Start
+## Deploying to IBM Bluemix
 
-If you're interested in learning all the steps needed to build this application, and want to explore all of the intricacies, then skip this section. This Quick Start section is for those who want to just get the code up-and-running as quickly as possible. Most of the instructions you'll need for this are in the [README that accompanies the application source code](https://github.com/cloudant-labs/location-tracker-nodejs). However, this Quick Start explains things in a bit more detail and breaks the steps down into separate [Deploying to IBM Bluemix](#deploying-to-ibm-bluemix) and [Running Locally](#running-locally) sections.
-
-### Deploying to IBM Bluemix
-
-#### Cloning
+### Cloning
 
 The first step is to clone the project from GitHub:
 
@@ -26,7 +22,7 @@ After cloning, you will have a new `location-tracker-nodejs` directory. Change i
 
     $ cd location-tracker-nodejs
 
-#### Configuring
+### Configuring
 
 Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. I'll wait. Then, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
 
@@ -47,7 +43,7 @@ If you instead prefer to use the [Bluemix dashboard](https://console.ng.bluemix.
 5. Enter "cloudant-location-tracker-db" in the "Service name" field
 6. Click the "Create" button
 
-#### Deploying
+### Deploying
 
 You are now ready to deploy your application! Deploying is as simple as:
 
@@ -57,9 +53,9 @@ From now on, you will only need to use this one command whenever you want to dep
 
 **Note:** You may notice that Bluemix assigns a route URL to your app containing a random word. This is defined in the [`manifest.yml`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/manifest.yml) file. The `host` key in this file contains the value `cloudant-location-tracker-${random-word}`. The random word is there to ensure that multiple people deploying the Location Tracker application to Bluemix do not run into naming collisions. However, this will cause a new route to be created for your application each time you deploy to Bluemix. To prevent this from happening, replace `${random-word}` with a hard coded (but unique) value.
 
-### Running Locally
+## Running Locally
 
-#### Configuring
+### Configuring
 
 Configuration of your local development environment is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
 
@@ -76,7 +72,7 @@ If you want to try the second option:
 2. Copy the JSON object displayed
 3. Paste the JSON object into your `.env` file as the value for the `VCAP_SERVICES` environment variable, removing all of the line breaks
 
-#### Installing
+### Installing
 
 [Download and install Node.js](https://nodejs.org/download/), if you haven't already. The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
 
@@ -99,7 +95,7 @@ Install the application's dependencies using npm:
 
 In addition to installing the application's dependencies, this command also runs scripts that create and configure databases needed by the application.
 
-#### Running
+### Running
 
 Install [Foreman](https://github.com/ddollar/foreman) and then start the application with the following command:
 
