@@ -69,7 +69,7 @@ Every Bluemix application needs a _buildpack_, which will be used to build and r
 
 ### Deploy Scripts
 
-The Location Tracker application declares two admin commands to be run when deploying to Bluemix:
+The Location Tracker application declares two admin processes to be run when deploying to Bluemix:
 
 * `./admin.js db put`
 * `./admin.js api set_permissions`
