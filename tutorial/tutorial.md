@@ -67,6 +67,14 @@ Every Bluemix application needs a _buildpack_, which will be used to build and r
 2. Run any scripts declared in `package.json`
 3. Provide a Node.js runtime environment to start your application within
 
+### Procfile
+
+A `Procfile` contains the names of one or more process to be run within Bluemix along with the commands used to run these processes. In Bluemix, every web application should include a process named `web`. Since the Location Tracker is a Node.js application, we start the application with the `node app.js` command (`app.js` being the main script for our application).
+
+```
+web: node app.js
+```
+
 ## Running Locally
 
 ### Configuring
