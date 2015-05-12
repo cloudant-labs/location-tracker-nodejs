@@ -101,6 +101,29 @@ A `Procfile` contains the names of one or more process to be run within Bluemix 
 web: node app.js
 ```
 
+### Configuration
+
+Applications within Bluemix are configured via environment variables. The configuration settings for services provisioned by Bluemix are automatically added to a `VCAP_SERVICES` environment variable, which holds a string representation of a JSON object. This value can be accessed within a Node.js app through the `process.env.VCAP_SERVICES` property. If you'd like, you can preview the values for individual services through the Bluemix dashboard by clicking "Show Credentials" on a service instance. For example, here is what the configuration might look like for a Cloudant service:
+
+```json
+{
+  "cloudantNoSQLDB": [
+    {
+      "name": "cloudant-location-tracker-db",
+      "label": "cloudantNoSQLDB",
+      "plan": "Shared",
+      "credentials": {
+        "username": "your-username",
+        "password": "your-password",
+        "host": "your-host",
+        "port": 443,
+        "url": "https://your-username:your-password@your-host"
+      }
+    }
+  ]
+}
+```
+
 ## Running Locally
 
 ### Configuring
