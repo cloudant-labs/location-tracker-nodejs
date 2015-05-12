@@ -181,3 +181,63 @@ Now that you've learned how to deploy the Location Tracker application to Bluemi
 ### PouchDB Authentication
 
 The frontend of the Location Tracker application uses the [PouchDB Authentication](https://github.com/nolanlawson/pouchdb-authentication) plugin. This library integrates with the CouchDB signup, login, session and logout (among other) APIs. While it is possible to configure Cloudant to use the CouchDB security model, Cloudant uses its own security model by default. There are several benefits and features of the Cloudant security model, so the Location Tracker uses the default Cloudant security model rather than the CouchDB security model. This means that the Location Tracker needs to map the CouchDB-style API calls from PouchDB Authentication to the Cloudant API. This mapping is done in `routes/api.js` where you will find the `putUser`, `postSession` and `getSession` functions. There is no function for mapping logouts, as the API for this is the same in both Cloudant and CouchDB.
+
+### User Registration
+
+In `app.js`, you will find the following route for handling user signups:
+
+```javascript
+// Handle user signup
+app.put('/api/_users/:id', jsonParser, api.putUser);
+```
+
+### User Login
+
+In `app.js`, you will find the following route for handling user logins:
+
+```javascript
+// Handle user login
+app.post('/api/_session', jsonParser, api.postSession);
+```
+
+### User Session
+
+In `app.js`, you will find the following route for handling getting user session info:
+
+```javascript
+// Handle getting user session info
+app.get('/api/_session', jsonParser, api.getSession);
+```
+
+### User Logout and Cloudant Service Proxy
+
+All other requests to `/api/*`, including handling user logout, are proxied to the Cloudant service in `app.js`:
+
+```javascript
+// Proxy requests for `/api/` to the Cloudant database server
+var apiProxy = httpProxy.createProxyServer();
+app.all('/api/*', function(req, res) {
+  if (!app.get('cloudant-location-tracker-db')) {
+    return res.status(500).json({error: 'No database server configured'});
+  }
+  // Remove first segment of the path (`/api/`)
+  var pathSegments = req.url.substr(1).split('/');
+  pathSegments.shift();
+  req.url = '/' + pathSegments.join('/');
+  // Work around Cloudant bug by stripping out query strings from top level URLs
+  if (0 == req.url.indexOf('/?')) {
+    req.url = '/';
+  }
+  // Strip out auth from Cloudant URL
+  var cloudantUrl = url.parse(app.get('cloudant-location-tracker-db').config.url);
+  var cloudantUrlSansAuth = url.parse(cloudantUrl.protocol + '//' + cloudantUrl.host + cloudantUrl.path);
+  // Override the Host header value to be that of the Cloudant database server
+  req.headers['host'] = cloudantUrl.host;
+  // TODO: Validate SSL certificate by setting and configuring `agent: https.globalAgent`
+  apiProxy.web(req, res, {
+    target: url.format(cloudantUrlSansAuth),
+    secure: true,
+    hostRewrite: true
+  });
+});
+```
