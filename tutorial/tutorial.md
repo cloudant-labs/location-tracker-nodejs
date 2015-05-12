@@ -191,6 +191,15 @@ In `app.js`, you will find the following route for handling user signups:
 app.put('/api/_users/:id', jsonParser, api.putUser);
 ```
 
+The `api.putUser` function:
+
+1. Generates a Cloudant API key and API password
+2. Gives the generated API key user read and write access to the `location-tracker` database
+3. AES encrypts the API key password using the user's chosen password as the encryption key
+4. Saves the user's metadata as a document in the `users` database
+
+Note that the user's password is never saved to the database. The password is used to encrypt the API key password (which is stored in its encrypted form) and then discarded.
+
 ### User Login
 
 In `app.js`, you will find the following route for handling user logins:
