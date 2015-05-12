@@ -184,7 +184,7 @@ The frontend of the Location Tracker application uses the [PouchDB Authenticatio
 
 ### User Registration
 
-In `app.js`, you will find the following route for handling user signups:
+In `app.js` you will find the following route for handling user signups:
 
 ```javascript
 // Handle user signup
@@ -202,16 +202,23 @@ Note that the user's password is never saved to the database. The password is us
 
 ### User Login
 
-In `app.js`, you will find the following route for handling user logins:
+In `app.js` you will find the following route for handling user logins:
 
 ```javascript
 // Handle user login
 app.post('/api/_session', jsonParser, api.postSession);
 ```
 
+The `api.postSession` function:
+
+1. Gets the user's document from the `user` database
+2. Decrypts the API password using the password supplied by the user
+3. Authenticates with Cloudant using the API key and decrypted API password
+4. Passes along the authentication cookie from Cloudant (assuming authentication was successful)
+
 ### User Session
 
-In `app.js`, you will find the following route for handling getting user session info:
+In `app.js` you will find the following route for handling getting user session info:
 
 ```javascript
 // Handle getting user session info
