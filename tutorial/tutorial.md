@@ -67,6 +67,32 @@ Every Bluemix application needs a _buildpack_, which will be used to build and r
 2. Execute any scripts declared in `package.json`
 3. Provide a Node.js runtime environment to start your application within
 
+### Deploy Scripts
+
+The Location Tracker application declares two admin commands to be run when deploying to Bluemix:
+
+* `./admin.js db put`
+* `./admin.js api set_permissions`
+
+These are declared as `prepublish` scripts within the `package.json` file (truncated for brevity):
+
+```json
+{
+  "name": "cloudant-location-tracker",
+  "version": "0.0.0",
+  "description": "A demo web application which records a device's location and saves this information to IBM Cloudant",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "./admin.js db put && ./admin.js api set_permissions",
+    "start": "node app.js"
+  },
+  …
+}
+```
+
+The `./admin.js db put` command creates `location-tracker` and `user` databases within the Cloudant service (if the databases don't already exist) and creates two Cloudant Query indexes that are used by the application. The `./admin.js api set_permissions` command makes the `location-tracker` database world readable.
+
 ### Procfile
 
 A `Procfile` contains the names of one or more process to be run within Bluemix along with the commands used to run these processes. In Bluemix, every web application should include a process named `web`. Since the Location Tracker is a Node.js application, we start the application with the `node app.js` command (`app.js` being the main script for our application).
