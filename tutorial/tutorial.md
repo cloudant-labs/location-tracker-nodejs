@@ -173,3 +173,11 @@ Install [Foreman](https://github.com/ddollar/foreman) and then start the applica
     $ foreman start
 
 You should now be able to access the application at [`http://localhost:5000`](http://localhost:5000). You now have an instance of the Location Tracker application running in your local development environment.
+
+## Managing User Access
+
+Now that you've learned how to deploy the Location Tracker application to Bluemix and how to run the application locally, let's take a look at the key reason we converted the Location Tracker from a CouchApp into a three-tier application in the first place. Without the Node.js middle tier, there would be no practical way to manage user access. In this section we'll explore how the Location Tracker application handles user registration, login and logout.
+
+### PouchDB Authentication
+
+The frontend of the Location Tracker application uses the [PouchDB Authentication](https://github.com/nolanlawson/pouchdb-authentication) plugin. This library integrates with the CouchDB signup, login, session and logout (among other) APIs. While it is possible to configure Cloudant to use the CouchDB security model, Cloudant uses its own security model by default. There are several benefits and features of the Cloudant security model, so the Location Tracker uses the default Cloudant security model rather than the CouchDB security model. This means that the Location Tracker needs to map the CouchDB-style API calls from PouchDB Authentication to the Cloudant API. This mapping is done in `routes/api.js` where you will find the `putUser`, `postSession` and `getSession` functions. There is no function for mapping logouts, as the API for this is the same in both Cloudant and CouchDB.
