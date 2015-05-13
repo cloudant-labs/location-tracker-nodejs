@@ -36,14 +36,14 @@ program
   .command('db <method>')
   .description('Create (put) or delete the database')
   .action(function(method, options) {
-    var cloudant = app.get('cloudant-location-tracker-db');
-    if (!cloudant) {
+    var cloudantService = app.get('cloudant-location-tracker-db');
+    if (!cloudantService) {
       console.error('No database configured');
       return;
     }
     switch (method) {
       case 'put':
-        cloudant.db.create('location-tracker', function(err, body) {
+        cloudantService.db.create('location-tracker', function(err, body) {
           if (!err) {
             console.log('Location tracker database created');
             var userLocationIndex = {
@@ -57,7 +57,7 @@ program
               }
             };
             // TODO: Make this happen even if location tracker database already exists
-            cloudant.use('location-tracker').index(userLocationIndex, function(err, result) {
+            cloudantService.use('location-tracker').index(userLocationIndex, function(err, result) {
               if (!err) {
                 console.log('User location index created');
               } else {
@@ -76,7 +76,7 @@ program
               }
             };
             // TODO: Make this happen even if location tracker database already exists
-            cloudant.use('users').index(userApiKeyIndex, function(err, result) {
+            cloudantService.use('users').index(userApiKeyIndex, function(err, result) {
               if (!err) {
                 console.log('User key index created');
               } else {
@@ -95,7 +95,7 @@ program
             }
           }
         });
-        cloudant.db.create('users', function(err, body) {
+        cloudantService.db.create('users', function(err, body) {
           if (!err) {
             console.log('Users database created');
           } else {
@@ -108,7 +108,7 @@ program
         });
         break;
       case 'delete':
-        cloudant.db.destroy('location-tracker', function(err, body) {
+        cloudantService.db.destroy('location-tracker', function(err, body) {
           if (!err) {
             console.log('Database deleted');
           } else {
@@ -119,7 +119,7 @@ program
             }
           }
         });
-        cloudant.db.destroy('users', function(err, body) {
+        cloudantService.db.destroy('users', function(err, body) {
           if (!err) {
             console.log('Users database deleted');
           } else {
@@ -144,14 +144,14 @@ program
   .command('api <endpoint>')
   .description('Call an API endpoint with preconfigured settings')
   .action(function(endpoint, options) {
-    var cloudant = app.get('cloudant-location-tracker-db');
-    if (!cloudant) {
+    var cloudantService = app.get('cloudant-location-tracker-db');
+    if (!cloudantService) {
       console.error('No database configured');
       return;
     }
     switch (endpoint) {
       case 'set_permissions':
-        cloudant.set_permissions({
+        cloudantService.set_permissions({
           database: 'location-tracker',
           username: 'nobody',
           roles: ['_reader']

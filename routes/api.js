@@ -5,8 +5,8 @@ var crypto = require('crypto'),
 
 module.exports.putUser = function(req, res) {
   var app = req.app;
-  var cloudant = app.get('cloudant-location-tracker-db');
-  if (!cloudant) {
+  var cloudantService = app.get('cloudant-location-tracker-db');
+  if (!cloudantService) {
     return res.status(500).json({ error: 'No database server configured' })
   }
   if (!req.body) {
@@ -16,10 +16,10 @@ module.exports.putUser = function(req, res) {
     // TOOD: Better handle this error
     return res.sendStatus(400);
   }
-  var usersDb = cloudant.use('users');
-  cloudant.generate_api_key(function(err, api) {
+  var usersDb = cloudantService.use('users');
+  cloudantService.generate_api_key(function(err, api) {
     if (!err) {
-      cloudant.set_permissions({database:'location-tracker', username:api.key, roles:['_reader', '_writer']}, function(err, result) {
+      cloudantService.set_permissions({database:'location-tracker', username:api.key, roles:['_reader', '_writer']}, function(err, result) {
         if (!err) {
           var cipher = crypto.createCipher(algorithm, req.body.password);
           var encryptedApiPassword = cipher.update(api.password, 'utf8', 'hex');
@@ -56,20 +56,20 @@ module.exports.putUser = function(req, res) {
 
 module.exports.postSession = function(req, res) {
   var app = req.app;
-  var cloudant = app.get('cloudant-location-tracker-db');
-  if (!cloudant) {
+  var cloudantService = app.get('cloudant-location-tracker-db');
+  if (!cloudantService) {
     return res.status(500).json({ error: 'No database server configured' })
   }
   if (!req.body) {
     return res.sendStatus(400);
   }
-  var usersDb = cloudant.use('users');
+  var usersDb = cloudantService.use('users');
   usersDb.get('org.couchdb.user:' + req.body.name, function(err, body) {
     if (!err) {
       var decipher = crypto.createDecipher(algorithm, req.body.password);
       var decryptedApiPassword = decipher.update(body.api_password, 'hex', 'utf8');
       decryptedApiPassword += decipher.final('utf8');
-      cloudant.auth(body.api_key, decryptedApiPassword, function(err, body, headers) {
+      cloudantService.auth(body.api_key, decryptedApiPassword, function(err, body, headers) {
         if (!err) {
           // TODO: This is a hack to deal with running app locally
           var cookieData = {};
@@ -122,8 +122,8 @@ module.exports.postSession = function(req, res) {
 
 module.exports.getSession = function(req, res) {
   var app = req.app;
-  var cloudant = app.get('cloudant-location-tracker-db');
-  if (!cloudant) {
+  var cloudantService = app.get('cloudant-location-tracker-db');
+  if (!cloudantService) {
     return res.status(500).json({ error: 'No database server configured' })
   }
   if (!req.body) {
@@ -145,7 +145,7 @@ module.exports.getSession = function(req, res) {
     cookie: 'AuthSession=' + req.cookies.AuthSession,
     account: service.credentials.username
   });
-  var usersDb = cloudant.use('users');
+  var usersDb = cloudantService.use('users');
   cookieCloudant.session(function(err, body) {
     if (!err) {
       usersDb.find({
