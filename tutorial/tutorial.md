@@ -265,3 +265,7 @@ app.all('/api/*', function(req, res) {
   });
 });
 ```
+
+## Next Steps
+
+This tutorial has shown you how to deploy the Location Tracker application to Bluemix, demonstrated how to run the application in your local development environment and explained how we manage user access in the Location Tracker application. If you find any bugs in the Location Tracker application, or see any room for improvement in the application or this accompanying tutorial, please [submit a new issue on GitHub](https://github.com/cloudant-labs/location-tracker-nodejs/issues/new). If you'd like to learn more about Cloudant, please read the [For Developers](https://cloudant.com/for-developers/) section of the Cloudant website.
