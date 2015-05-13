@@ -231,7 +231,7 @@ In `app.js` you will find the following route for handling getting user session 
 app.get('/api/_session', jsonParser, api.getSession);
 ```
 
-The `api.getSession` function calls the corresponding `session` function from the Cloudant Node.js client library, passing along the cookie from the client, and returning the response from Cloudant.
+The `api.getSession` function calls the corresponding `session` function from the Cloudant Node.js client library, passing along the cookie from the client, and returning the response from Cloudant (replacing the API key with the user name).
 
 ### User Logout and Cloudant Service Proxy
 
