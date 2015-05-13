@@ -12,6 +12,12 @@ Let's take managing user access, for example. How would you go about building a 
 
 ## Deploying to IBM Bluemix
 
+### One Click Deployment
+
+If you'd like, you can deploy the Location Tracker application to Bluemix by simply clicking the "Deploy to Blumix" button below. Read on if you'd instead prefer step-by-step instructions of what's involved in deploying an application to Bluemix.
+
+[![Deploy to Bluemix](https://bluemix.net/deploy/button_x2.png)](https://bluemix.net/deploy?repository=https://github.com/cloudant-labs/location-tracker-nodejs)
+
 ### Cloning
 
 The first step is to clone the project from GitHub:
