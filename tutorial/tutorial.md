@@ -266,6 +266,52 @@ app.all('/api/*', function(req, res) {
 });
 ```
 
+## Querying Locations By User
+
+One of the other improvements we made to the Location Tracker application was to display a map of individual user locations. This is done using [Cloudant Query](https://cloudant.com/blog/introducing-cloudant-query/) and [PouchDB Find](http://nolanlawson.github.io/pouchdb-find/). The technology behind Cloudant Query is a MongoDB-inspired query language interface for Apache CouchDB called [Mango](https://github.com/cloudant/mango), one of several signification contributions from IBM Cloudant that you will find in [Apache CouchDB 2.0](https://couchdb.apache.org/developer-preview/2.0/).
+
+The first step in using Cloudant Query is to define an index. Fortunately, Cloudant Query makes creating an index much simpler than defining a view with map and reduce functions. In the Location Tracker application, we create an index on the `properties.username` and `properties.timestamp` fields of the `location-tracker` database in the `admin.js` script (which is run on automatically on deployment and installation) using the [Cloudant Node.js client library](https://github.com/cloudant/nodejs-cloudant).
+
+```javascript
+var userLocationIndex = {
+  name: 'user-location',
+  type: 'json',
+  index: {
+    fields: [
+      'properties.username',
+      'properties.timestamp'
+    ]
+  }
+};
+// TODO: Make this happen even if location tracker database already exists
+cloudantService.use('location-tracker').index(userLocationIndex, function(err, result) {
+  if (!err) {
+    console.log('User location index created');
+  } else {
+    if (412 == err.status_code) {
+      console.log('User location index already exists');
+    } else {
+      console.error('Error creating user location index');
+    }
+  }
+});
+```
+
+Once an index exists, it is now possible to perform queries against this index. This query is done by the frontend `public/script/app.js` script using PouchDB Find. When a specific user is selected, we query for documents with the `properties.username` field being equal to (`$eq`) the selected username. Results are collated by the `timestamp` field, as this was the second field in the index. The map is then updated with the results.
+
+```javascript
+db.find({
+  selector: {'properties.username': {'$eq': username}},
+}).then(function (result) {
+  movementLayer = instantiateLeafletMap();
+  result.docs.map(function(doc) {
+    updateMovingLayer(doc, movementLayer);
+  });
+  $('.click-blocker').hide();
+  $('#multi-user-popup').hide();
+});
+```
+
 ## Next Steps
 
 This tutorial has shown you how to deploy the Location Tracker application to Bluemix, demonstrated how to run the application in your local development environment and explained how we manage user access in the Location Tracker application. If you find any bugs in the Location Tracker application, or see any room for improvement in the application or this accompanying tutorial, please [submit a new issue on GitHub](https://github.com/cloudant-labs/location-tracker-nodejs/issues/new). If you'd like to learn more about Cloudant, please read the [For Developers](https://cloudant.com/for-developers/) section of the Cloudant website.
