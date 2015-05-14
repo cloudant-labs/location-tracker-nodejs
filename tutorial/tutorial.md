@@ -1,53 +1,58 @@
 # Location Tracker Part 3: Add a middle tier to manage users, with Node.js
 
-In [Part 1](https://github.com/cloudant-labs/location-tracker-couchapp/blob/master/tutorial/tutorial.adoc) of this tutorial series we learned why location is so important to modern mobile apps and how to build the basic functionality. In [Part 2](https://github.com/cloudant-labs/location-tracker-angular/blob/master/tutorial/tutorial.adoc), we took that code and transformed it into a serious app using AngularJS. In both Parts 1 and 2, the Location Tracker application was built as a [CouchApp](http://docs.couchdb.org/en/latest/couchapp/). The cool thing about a CouchApp is that it can be hosted completely within Cloudant. This makes CouchApps great for demo applications like the Location Tracker. As an added bonus, you can quickly fork a CouchApp by replicating it into your own Cloudant account and have a fully-functioning application up-and-running in under 60 seconds. However, there are limitations to CouchApps.
+In [Part 1](https://github.com/cloudant-labs/location-tracker-couchapp/blob/master/tutorial/tutorial.adoc) of this tutorial series we learned why location is so important to modern mobile apps and how to build the basic functionality. In [Part 2](https://github.com/cloudant-labs/location-tracker-angular/blob/master/tutorial/tutorial.adoc), we took that code and transformed it into a serious app using AngularJS. In both Parts 1 and 2, the Location Tracker application was built as a [CouchApp](http://docs.couchdb.org/en/latest/couchapp/). The cool thing about a CouchApp is that it can be hosted completely within Cloudant. This makes CouchApps great for demo applications like the Location Tracker. As an added bonus, you can quickly fork a CouchApp by replicating it into your own Cloudant account and have a fully-functioning application up-and-running in under 60 seconds. But, CouchApps have limitations.
 
-Without a [middle tier](http://en.wikipedia.org/wiki/Multitier_architecture), building certain functionality becomes a challenge. The typical three-tier architecture includes a data tier, an application (or logic) tier, and a presentation tier. CouchApps eschew the traditional application tier and just include a data tier (Cloudant or CouchDB) and a presentation tier (HTML5, CSS and JavaScript). While possible to build _some_ application logic within Cloudant, there are practical limitations. This is because Cloudant is primarily intended to be used as a data layer.
+Without a [middle tier](http://en.wikipedia.org/wiki/Multitier_architecture), building certain features is a challenge. The typical three-tier architecture includes a data tier, an application (middle, or logic) tier, and a presentation tier. CouchApps eschew the traditional application tier and just include a data tier (Cloudant or CouchDB) and a presentation tier (HTML5, CSS and JavaScript). While you can build _some_ application logic within Cloudant, there are practical limitations. That's because Cloudant is primarily intended to be used as a data layer.
 
 [![Overview of a three-tier application including presentation tier, logic tier, and data tier](http://upload.wikimedia.org/wikipedia/commons/5/51/Overview_of_a_three-tier_application_vectorVersion.svg "Overview of a Three-Tier Application")](http://en.wikipedia.org/wiki/Multitier_architecture)
 
-Let's take managing user access, for example. How would you go about building a user management system without an application tier? If you can figure out how to do this, I'd love to know! In Part 3 of this tutorial we build a Node.js application that handles user registration, login and logout. Additionally, we make the Location Tracker application deployable to [IBM Bluemix](https://console.ng.bluemix.net/) and update the map to display individual user locations, rather than one big map of all user locations.
+Take user access, for example. Our CouchApp can't tackle authentication tasks. To build a user-management system, you need an logic/application tier.  This tutorial shows how to build that middle tier and, because our app is now outgrowing its former home, find a new place to host our creation. Specifically, we will:
+
+- build a Node.js application that handles user registration, login, and logout. 
+- Deploy our app to [IBM Bluemix](https://console.ng.bluemix.net/), which provides a fast, easy way to host and deploy our more complex app. 
+- update the map to show individual user locations and movement, instead of all users at once.
 
 [![IBM Bluemix logo](http://upload.wikimedia.org/wikipedia/commons/c/c7/IBM_Bluemix_logo.svg "IBM Bluemix")](https://console.ng.bluemix.net/)
 
-## Deploying to IBM Bluemix
+## Deploy to IBM Bluemix
 
-### One Click Deployment
+### One-Click Deployment
 
-If you'd like, you can deploy the Location Tracker application to Bluemix by simply clicking the "Deploy to Blumix" button below. Read on if you'd instead prefer step-by-step instructions of what's involved in deploying an application to Bluemix.
+The fastest way to deploy the Location Tracker app to Bluemix to click the *Deploy to Bluemix* button. Then skip ahead to learn how [edit online or locally](#Code-Online-with-Bluemix-and-GitHub).  
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button_x2.png)](https://bluemix.net/deploy?repository=https://github.com/cloudant-labs/location-tracker-nodejs)
 
-### Cloning
+### Deploy Manually
+#### Clone 
 
-The first step is to clone the project from GitHub:
+If you want to deploy to Bluemix manually and work on your local machine, the first step is to clone the project from GitHub:
 
     $ git clone https://github.com/cloudant-labs/location-tracker-nodejs.git
 
-After cloning, you will have a new `location-tracker-nodejs` directory. Change into this directory:
+After cloning, you'll have a new `location-tracker-nodejs` directory. Change into this directory:
 
     $ cd location-tracker-nodejs
 
-### Configuring
+#### Configure
 
-Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. I'll wait. Then, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
+Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. Then, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
 
 1. Connect to Bluemix using the `cf api` command
 2. Log in to Bluemix using the `cf login` command
 
-### Deploying
+#### Deploy
 
-You are now ready to deploy your application! Deploying is as simple as:
+You're now ready to deploy your app! Deploying is as simple as:
 
     $ cf push
 
-From now on, you will only need to use this one command whenever you want to deploy changes to your application. In the [Bluemix dashboard](https://console.ng.bluemix.net/), find the "cloudant-location-tracker" app. Look for "Routes" and find the route assigned to your app. Note that the route does not use SSL by default. I recommend changing the `http` to `https` in the route URL, as the Location Tracker app collects user credentials. Go ahead and visit this URL to see your newly deployed app! Keep reading to learn more about how applications are deployed to Bluemix, or skip to the [Running Locally](#running-locally) section to learn how to run the Location Tracker application in your local development environment.
+From now on, you only need to use this one command whenever you want to deploy changes to your application. In the [Bluemix dashboard](https://console.ng.bluemix.net/), find the "cloudant-location-tracker" app. Look for "Routes" and find the route assigned to your app. Note that the route does not use SSL by default. I recommend changing the `http` to `https` in the route URL, as the Location Tracker app collects user credentials. Go ahead and visit this URL to see your newly deployed app! Keep reading to learn more about how applications are deployed to Bluemix, or skip to the [Run Locally](#run-locally) section to learn how to run the Location Tracker application in your local development environment.
 
 **Note:** You may notice that Bluemix assigns a route URL to your app containing a random word. This is defined in the [`manifest.yml`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/manifest.yml) file. The `host` key in this file contains the value `cloudant-location-tracker-${random-word}`. The random word is there to ensure that multiple people deploying the Location Tracker application to Bluemix do not run into naming collisions. However, this will cause a new route to be created for your application each time you deploy to Bluemix. To prevent this from happening, replace `${random-word}` with a hard coded (but unique) value.
 
-### Application Manifest
+#### Application Manifest
 
-In the root of the Location Tracker application, you will find a file named `manifest.yml`. This _application manifest_ instructs Bluemix how to deploy the Location Tracker application.
+In the root of the Location Tracker application, you will find a file named `manifest.yml`. This _application manifest_ tells Bluemix how to deploy the Location Tracker application.
 
 ```yaml
 ---
@@ -65,7 +70,7 @@ applications:
 
 In the `declared-services` section, we define a Cloudant service (`cloudantNoSQLDB`) with a service name of `cloudant-location-tracker-db`. We declare that this is a `Shared` plan, meaning it is a multi-tenant Cloudant account. Our application manifest includes one application named `cloudant-location-tracker` that uses 128M of memory. We instruct Bluemix to use a host name of `cloudant-location-tracker-${random-word}`. This will give us a host name of `cloudant-location-tracker-` followed by a random word generated by Bluemix (see the note above about this). This host name will be a subdomain of `mybluemix.net` (e.g. `cloudant-location-tracker-foo.mybluemix.net`). The last two lines bind our Cloudant service to our application.
 
-### Buildpack
+#### Buildpack
 
 Every Bluemix application needs a _buildpack_, which will be used to build and run your application. In most cases, Bluemix will automatically detect the appropriate buildpack for your application. In the case of the Location Tracker application, Bluemix will use the Node.js buildpack. The Node.js buildpack will:
 
@@ -73,7 +78,7 @@ Every Bluemix application needs a _buildpack_, which will be used to build and r
 2. Execute any scripts declared in `package.json`
 3. Provide a Node.js runtime environment to start your application within
 
-### Deploy Scripts
+#### Deploy Scripts
 
 The Location Tracker application declares two admin processes to be run when deploying to Bluemix:
 
@@ -99,7 +104,7 @@ These are declared as `prepublish` scripts within the `package.json` file (trunc
 
 The `./admin.js db put` command creates `location-tracker` and `user` databases within the Cloudant service (if the databases don't already exist) and creates two Cloudant Query indexes that are used by the application. The `./admin.js api set_permissions` command makes the `location-tracker` database world readable.
 
-### Procfile
+#### Procfile
 
 A `Procfile` contains the names of one or more process to be run within Bluemix along with the commands used to run these processes. In Bluemix, every web application should include a process named `web`. Since the Location Tracker is a Node.js application, we start the application with the `node app.js` command (`app.js` being the main script for our application).
 
@@ -107,7 +112,7 @@ A `Procfile` contains the names of one or more process to be run within Bluemix 
 web: node app.js
 ```
 
-### Configuration
+#### Configuration
 
 Applications within Bluemix are configured via environment variables. The configuration settings for services provisioned by Bluemix are automatically added to a `VCAP_SERVICES` environment variable, which holds a string representation of a JSON object. This value can be accessed within a Node.js app through the `process.env.VCAP_SERVICES` property. If you'd like, you can preview the values for individual services through the Bluemix dashboard by clicking "Show Credentials" on a service instance. For example, here is what the configuration might look like for a Cloudant service:
 
@@ -130,9 +135,15 @@ Applications within Bluemix are configured via environment variables. The config
 }
 ```
 
-## Running Locally
+## Code Online with Bluemix and GitHub 
 
-### Configuring
+If you don't want to download and work locally, you can edit this app directly through your browser. Bluemix features its own development environment--an embedded instance of GitHub that lets you edit code, commit and push changes, then deploy. This is a fast way to play with code, see changes in action, and share your project.  In Bluemix, open your app and click the *Edit Code* button. 
+
+## Run Locally
+
+If you prefer to work locally, here's how to configure, install, and run:
+
+### Configure
 
 Configuration of your local development environment is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
 
@@ -149,7 +160,7 @@ If you want to try the second option:
 2. Copy the JSON object displayed
 3. Paste the JSON object into your `.env` file as the value for the `VCAP_SERVICES` environment variable, removing all of the line breaks
 
-### Installing
+### Install
 
 [Download and install Node.js](https://nodejs.org/download/), if you haven't already. The Location Tracker application uses [npm (node package manager)](https://www.npmjs.com/) to manage the application's various dependencies on external packages. You can see all of the application's dependencies in the [`package.json`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/package.json) file (truncated for readability):
 
@@ -182,7 +193,7 @@ You should now be able to access the application at [`http://localhost:5000`](ht
 
 ## Managing User Access
 
-Now that you've learned how to deploy the Location Tracker application to Bluemix and how to run the application locally, let's take a look at the key reason we converted the Location Tracker from a CouchApp into a three-tier application in the first place. Without the Node.js middle tier, there would be no practical way to manage user access. In this section we'll explore how the Location Tracker application handles user registration, login and logout.
+Now let's take a look at the key reason we converted the Location Tracker from a CouchApp into a three-tier application. Without the Node.js middle tier, there would be no practical way to manage user access. In this section, we'll explore how the Location Tracker application handles user registration, login, and logout.
 
 ### PouchDB Authentication
 
@@ -231,7 +242,7 @@ In `app.js` you will find the following route for handling getting user session 
 app.get('/api/_session', jsonParser, api.getSession);
 ```
 
-The `api.getSession` function calls the corresponding `session` function from the [Cloudant Node.js client library](https://github.com/cloudant/nodejs-cloudant), passing along the cookie from the client, and returning the response from Cloudant (replacing the API key with the user name).
+The `api.getSession` function calls the corresponding `session` function from the Cloudant Node.js client library, passing along the cookie from the client, and returning the response from Cloudant.
 
 ### User Logout and Cloudant Service Proxy
 
@@ -268,9 +279,9 @@ app.all('/api/*', function(req, res) {
 
 ## Querying Locations By User
 
-One of the other improvements we made to the Location Tracker application was to display a map of individual user locations. This is done using [Cloudant Query](https://cloudant.com/blog/introducing-cloudant-query/) and [PouchDB Find](http://nolanlawson.github.io/pouchdb-find/). The technology behind Cloudant Query is a MongoDB-inspired query language interface for Apache CouchDB called [Mango](https://github.com/cloudant/mango), one of several signification contributions from IBM Cloudant that you will find in [Apache CouchDB 2.0](https://couchdb.apache.org/developer-preview/2.0/).
+One of the other improvements we made to the Location Tracker application was to display a map of individual user locations. This is done using [Cloudant Query](https://cloudant.com/blog/introducing-cloudant-query/) and [PouchDB Find](http://nolanlawson.github.io/pouchdb-find/). The technology behind Cloudant Query is a MongoDB-inspired query language interface for Apache CouchDB called [Mango](https://github.com/cloudant/mango), one of several significant contributions from IBM Cloudant that you will find in [Apache CouchDB 2.0](https://couchdb.apache.org/developer-preview/2.0/).
 
-The first step in using Cloudant Query is to define an index. Fortunately, Cloudant Query makes creating an index much simpler than defining a view with map and reduce functions. In the Location Tracker application, we create an index on the `properties.username` and `properties.timestamp` fields of the `location-tracker` database in the `admin.js` script (which is run on automatically on deployment and installation) using the [Cloudant Node.js client library](https://github.com/cloudant/nodejs-cloudant).
+The first step in using Cloudant Query is to define an index. Fortunately, Cloudant Query makes creating an index much simpler than [defining a view with map and reduce functions](https://docs.cloudant.com/api.html#creating-views). In the Location Tracker application, we create an index on the `properties.username` and `properties.timestamp` fields of the `location-tracker` database in the `admin.js` script (which is run on automatically on deployment and installation) using the [Cloudant Node.js client library](https://github.com/cloudant/nodejs-cloudant).
 
 ```javascript
 var userLocationIndex = {
@@ -297,7 +308,7 @@ cloudantService.use('location-tracker').index(userLocationIndex, function(err, r
 });
 ```
 
-Once an index exists, it is now possible to perform queries against this index. This query is done by the frontend `public/script/app.js` script using PouchDB Find. When a specific user is selected, we query for documents with the `properties.username` field being equal to (`$eq`) the selected username. Results are collated by the `timestamp` field, as this was the second field in the index. The map is then updated with the results.
+Once an index exists, you can perform queries against this index. This query is done by the frontend `public/script/app.js` script using PouchDB Find. When a specific user is selected, we query for documents with the `properties.username` field being equal to (`$eq`) the selected username. Results are collated by the `timestamp` field, as this was the second field in the index. The map is then updated with the results.
 
 ```javascript
 db.find({
@@ -314,4 +325,4 @@ db.find({
 
 ## Next Steps
 
-This tutorial has shown you how to deploy the Location Tracker application to Bluemix, demonstrated how to run the application in your local development environment and explained how we manage user access in the Location Tracker application. If you find any bugs in the Location Tracker application, or see any room for improvement in the application or this accompanying tutorial, please [submit a new issue on GitHub](https://github.com/cloudant-labs/location-tracker-nodejs/issues/new). If you'd like to learn more about Cloudant, please read the [For Developers](https://cloudant.com/for-developers/) section of the Cloudant website.
+This tutorial showed you how to deploy the Location Tracker application to Bluemix, demonstrated how to edit it online or run the application in your local development environment, and explained how it manages user access. If you find any bugs in the Location Tracker app, or see room for improvement in the application or this accompanying tutorial, please [submit a new issue on GitHub](https://github.com/cloudant-labs/location-tracker-nodejs/issues/new). If you'd like to learn more about Cloudant, please read the [For Developers](https://cloudant.com/for-developers/) section of the Cloudant website.
