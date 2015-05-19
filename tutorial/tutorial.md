@@ -18,7 +18,7 @@ Take user access, for example. Our CouchApp can't tackle authentication tasks. T
 
 ### One-Click Deployment
 
-The fastest way to deploy the Location Tracker app to Bluemix to click the *Deploy to Bluemix* button. Then skip ahead to learn how [edit online or locally](#Code-Online-with-Bluemix-and-GitHub).  
+The fastest way to deploy the Location Tracker app to Bluemix to click the **Deploy to Bluemix** button. Then skip ahead to learn how [edit online or locally](#Code-Online-with-Bluemix-and-GitHub).  
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button_x2.png)](https://bluemix.net/deploy?repository=https://github.com/cloudant-labs/location-tracker-nodejs)
 
@@ -135,9 +135,9 @@ Applications within Bluemix are configured via environment variables. The config
 }
 ```
 
-## Code Online with Bluemix and GitHub 
+## Code Online with Bluemix and Git 
 
-If you don't want to download and work locally, you can edit this app directly through your browser. Bluemix features its own development environment--an embedded instance of GitHub that lets you edit code, commit and push changes, then deploy. This is a fast way to play with code, see changes in action, and share your project.  In Bluemix, open your app and click the *Edit Code* button. 
+If you don't want to download and work locally, you can edit this app directly through your browser. Bluemix features its own development environment--a web-based version of Git that lets you edit code, commit and push changes, then deploy. This is a fast way to play with code, see changes in action, and share your project.  In Bluemix, open your app and click the **Edit Code** button. (If you don't see this button, click the **Add Git** button to create the Git repository.)
 
 ## Run Locally
 
