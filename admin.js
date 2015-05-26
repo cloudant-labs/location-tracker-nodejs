@@ -184,7 +184,15 @@ program
   .action(function(options) {
     var vcapApplication = app.get('vcapApplication');
     if (vcapApplication) {
-      var event = {};
+      var event = {
+        date_sent: new Date().toJSON()
+      };
+      if (pkg.version) {
+        event.code_version = pkg.version;
+      }
+      if (pkg.repository && pkg.repository.url) {
+        event.repository_url = pkg.repository.url;
+      }
       if (vcapApplication.application_name) {
         event.application_name = vcapApplication.application_name;
       }
