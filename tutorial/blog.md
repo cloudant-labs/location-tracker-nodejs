@@ -8,7 +8,7 @@ Without a [middle tier](http://en.wikipedia.org/wiki/Multitier_architecture), bu
 
 Let's take managing user access, for example. How would you go about building a user management system without an application tier? If you can figure out how to do this, I'd love to know! In [Part 3](tutorial.md) of this tutorial we build a Node.js application that handles user registration, login and logout. Additionally, we make the Location Tracker application deployable to [IBM Bluemix](https://console.ng.bluemix.net/) and update the map to display individual user locations, rather than one big map of all user locations.
 
-If you'd like, you can deploy the Location Tracker application to Bluemix by simply clicking the "Deploy to Blumix" button below. [Read the full tutorial](tutorial.md) if you'd instead prefer step-by-step instructions of what's involved in deploying the Location Tracker application to Bluemix, instructions for running the application in your local development environment and an explanation of how we manage user access in the Location Tracker application.
+If you want, dive in to the code right right now. Deploy the Location Tracker application to Bluemix by clicking the **Deploy to Bluemix** button. To read all the details, including a step-by-step explanation of what's involved when you deploy to Bluemix, instructions for running the application in your local development environment, and an explanation of how we manage user access in the Location Tracker application [read the full tutorial](tutorial.md).
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button_x2.png)](https://bluemix.net/deploy?repository=https://github.com/cloudant-labs/location-tracker-nodejs)
 
