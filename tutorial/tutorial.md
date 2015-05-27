@@ -18,7 +18,7 @@ Take user access, for example. Our CouchApp can't tackle authentication tasks. T
 
 ### One-Click Deployment
 
-The fastest way to deploy the Location Tracker app to Bluemix is to click the **Deploy to Bluemix** button. Then skip ahead to learn how [edit online or locally](#Code-Online-with-Bluemix-and-GitHub).  
+The fastest way to deploy the Location Tracker app to Bluemix is to click the **Deploy to Bluemix** button. Then skip ahead to learn how [edit online or locally](#Code-Online-with-Bluemix-and-GitHub).  Note: you will need to sign up for a Bluemix Devops Services account at https://hub.jazz.net/
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button_x2.png)](https://bluemix.net/deploy?repository=https://github.com/cloudant-labs/location-tracker-nodejs)
 
@@ -39,8 +39,8 @@ After cloning, you'll have a new `location-tracker-nodejs` directory. Change int
 
 Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. Then, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
 
-1. Connect to Bluemix using the `cf api` command
-2. Log in to Bluemix using the `cf login` command
+1. Connect to Bluemix using the `cf api` command e.g cf api https://api.ng.bluemix.net
+2. Log in to Bluemix using the `cf login` command e.g. cf login -u john.doe@acme.com -o john.doe@acme.com -s myspace
 
 #### Deploy
 
