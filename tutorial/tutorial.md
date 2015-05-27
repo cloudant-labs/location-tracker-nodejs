@@ -18,7 +18,7 @@ Take user access, for example. Our CouchApp can't tackle authentication tasks. T
 
 ### One-Click Deployment
 
-The fastest way to deploy the Location Tracker app to Bluemix is to click the **Deploy to Bluemix** button. Then skip ahead to learn how [edit online or locally](#Code-Online-with-Bluemix-and-GitHub).
+The fastest way to deploy the Location Tracker app to Bluemix is to click the **Deploy to Bluemix** button. Then skip ahead to learn how [edit online or locally](#code-online-with-bluemix-and-git).
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button_x2.png)](https://bluemix.net/deploy?repository=https://github.com/cloudant-labs/location-tracker-nodejs)
 
