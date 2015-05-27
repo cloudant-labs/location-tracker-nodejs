@@ -27,6 +27,7 @@ The fastest way to deploy the Location Tracker app to Bluemix is to click the **
 If you have questions about working in Bluemix, find answers in the [Bluemix Docs](https://www.ng.bluemix.net/docs/).
 
 ### Deploy Manually
+
 #### Clone 
 
 If you want to deploy to Bluemix manually and work on your local machine, the first step is to clone the project from GitHub:
