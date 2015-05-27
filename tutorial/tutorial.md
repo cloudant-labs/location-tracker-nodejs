@@ -42,8 +42,10 @@ After cloning, you'll have a new `location-tracker-nodejs` directory. Change int
 
 Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you haven't already. Go ahead and do that now. Then, [install the Cloud Foundry command line interface](https://www.ng.bluemix.net/docs/#starters/install_cli.html). This is the tool that you'll use to deploy to Bluemix. Follow the instructions on the Cloud Foundry command line interface installation page to:
 
-1. Connect to Bluemix using the `cf api` command e.g cf api https://api.ng.bluemix.net
-2. Log in to Bluemix using the `cf login` command e.g. cf login -u john.doe@acme.com -o john.doe@acme.com -s myspace
+1. Connect to Bluemix using the `cf api` command. For example:  
+`cf api https://api.ng.bluemix.net`
+2. Log in to Bluemix using the `cf login` command. For example:  
+`cf login -u john.doe@acme.com -o john.doe@acme.com -s myspace`
 
 #### Deploy
 
