@@ -46,6 +46,20 @@ Next, [sign up for a Bluemix account](https://console.ng.bluemix.net/), if you h
 `cf api https://api.ng.bluemix.net`
 2. Log in to Bluemix using the `cf login` command. For example:  
 `cf login -u john.doe@acme.com -o john.doe@acme.com -s myspace`
+3. Do _not_ deploy to Bluemix quite yet, we've got one more thing we need to do first (if you do accidentally deploy to Bluemix at this point, that's not a problem)
+
+The next step is to create a Cloudant service within Bluemix. This only needs to be done once. You can either do this at the command line, or in the Bluemix dashboard. If you prefer to use the command line:
+
+    $ cf create-service cloudantNoSQLDB Shared cloudant-location-tracker-db
+
+If you instead prefer to use the [Bluemix dashboard](https://console.ng.bluemix.net/):
+
+1. Click "Services"
+2. Click "Add a Service or API"
+3. Under "Data Management", click "Cloudant NoSQL DB"
+4. Under "App" select "Leave unbound" (we bind the app to the service in the [`manifest.yml`](https://github.com/cloudant-labs/location-tracker-nodejs/blob/master/manifest.yml) file)
+5. Enter "cloudant-location-tracker-db" in the "Service name" field
+6. Click the "Create" button
 
 #### Deploy
 
