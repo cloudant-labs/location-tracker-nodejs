@@ -15,7 +15,7 @@ This data is collected from the `VCAP_APPLICATION` environment variable in IBM B
 
 ### Disabling Deployment Tracking
 
-Deployment tracking can be disabled by removing the `install` script line (having the value of `./admin.js track`) from the `scripts` section of `package.json`.
+Deployment tracking can be disabled by removing `./admin.js track && ` from the `install` script line of the `scripts` section within `package.json`.
 
 ## Cloning
 

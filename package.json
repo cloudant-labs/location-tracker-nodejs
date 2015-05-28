@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "./admin.js db put && ./admin.js api set_permissions",
-    "install": "./admin.js track",
+    "install": "./admin.js track && ./admin.js db put && ./admin.js api set_permissions",
     "start": "node app.js"
   },
   "repository": {
