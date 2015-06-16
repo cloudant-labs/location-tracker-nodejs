@@ -104,7 +104,7 @@ The Location Tracker application declares two admin processes to be run when dep
 * `./admin.js db put`
 * `./admin.js api set_permissions`
 
-These are declared as `prepublish` scripts within the `package.json` file (truncated for brevity):
+These are declared as `install` scripts within the `package.json` file (truncated for brevity):
 
 ```json
 {
@@ -114,7 +114,7 @@ These are declared as `prepublish` scripts within the `package.json` file (trunc
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "./admin.js db put && ./admin.js api set_permissions",
+    "install": "./admin.js track && ./admin.js db put && ./admin.js api set_permissions",
     "start": "node app.js"
   },
   …
