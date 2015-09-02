@@ -129,10 +129,6 @@ module.exports.getSession = function(req, res) {
   if (!req.body) {
     return res.sendStatus(400);
   }
-  if (!req.cookies.AuthSession) {
-    //TODO: Better return status here
-    return res.status(500).json({error: 'Internal Server Error'});
-  }
   var vcapServices = app.get('vcapServices');
   if (!(vcapServices.cloudantNoSQLDB && vcapServices.cloudantNoSQLDB.length > 0)) {
     return res.status(500).json({error: 'No VCAP_SERVICES configured'});
@@ -161,7 +157,7 @@ module.exports.getSession = function(req, res) {
             body.userCtx.name = result.docs[0].name;
             res.json(body);
           } else {
-            res.status(404).json({error: 'Not Found'});
+            res.json(body);
           }
         } else {
           res.status(500).json({error: 'Internal Server Error'});
