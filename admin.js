@@ -157,17 +157,21 @@ program
       return;
     }
     switch (endpoint) {
-      case 'set_permissions':
-        cloudantService.set_permissions({
-          database: 'location-tracker',
-          username: 'nobody',
-          roles: ['_reader']
-        }, function(err, result) {
-          if (!err) {
-            console.log('Location tracker database is now world readable');
-          } else {
-            console.error('Error setting permissions on location tracker database');
+      case 'set_security':
+        var locationTrackerDb = cloudantService.use('location-tracker');
+        locationTrackerDb.get_security(function(err, result) {
+          var security = result.cloudant;
+          if (!security) {
+            security = {};
           }
+          security['nobody'] = ['_reader'];
+          locationTrackerDb.set_security(security, function(err, result) {
+            if (!err) {
+              console.log('Location tracker database is now world readable');
+            } else {
+              console.error('Error setting permissions on location tracker database');
+            }
+          });
         });
         break;
     }

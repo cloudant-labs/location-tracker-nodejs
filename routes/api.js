@@ -19,33 +19,38 @@ module.exports.putUser = function(req, res) {
   var usersDb = cloudantService.use('users');
   cloudantService.generate_api_key(function(err, api) {
     if (!err) {
-      cloudantService.set_permissions({database:'location-tracker', username:api.key, roles:['_reader', '_writer']}, function(err, result) {
-        if (!err) {
-          var cipher = crypto.createCipher(algorithm, req.body.password);
-          var encryptedApiPassword = cipher.update(api.password, 'utf8', 'hex');
-          encryptedApiPassword += cipher.final('hex');
-          var user = {
-            _id: req.params.id,
-            name: req.body.name,
-            api_key: api.key,
-            api_password: encryptedApiPassword
-          };
-          usersDb.insert(user, user._id, function(err, body) {
-            if (!err) {
-              res.status(201).json({
-                ok: true,
-                id: user._id,
-                rev: body.rev
-              });
-            } else {
-              console.error(err);
-              res.status(500).json({error: 'Internal Server Error'});
-            }
-          });
-        } else {
-          console.error(err);
-          res.status(500).json({error: 'Internal Server Error'});
-        }
+      var locationTrackerDb = cloudantService.use('location-tracker');
+      locationTrackerDb.get_security(function(err, result) {
+        var security = result.cloudant;
+        security[api.key] = ['_reader', '_writer'];
+        locationTrackerDb.set_security(security, function(err, result) {
+          if (!err) {
+            var cipher = crypto.createCipher(algorithm, req.body.password);
+            var encryptedApiPassword = cipher.update(api.password, 'utf8', 'hex');
+            encryptedApiPassword += cipher.final('hex');
+            var user = {
+              _id: req.params.id,
+              name: req.body.name,
+              api_key: api.key,
+              api_password: encryptedApiPassword
+            };
+            usersDb.insert(user, user._id, function(err, body) {
+              if (!err) {
+                res.status(201).json({
+                  ok: true,
+                  id: user._id,
+                  rev: body.rev
+                });
+              } else {
+                console.error(err);
+                res.status(500).json({error: 'Internal Server Error'});
+              }
+            });
+          } else {
+            console.error(err);
+            res.status(500).json({error: 'Internal Server Error'});
+          }
+        });
       });
      } else {
         console.error(err);
