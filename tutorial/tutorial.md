@@ -12,8 +12,6 @@ Take user access, for example. Our CouchApp can't tackle authentication tasks. T
 - Deploy our app to [IBM Bluemix](https://console.ng.bluemix.net/), which provides a fast, easy way to host and deploy our more complex app. 
 - update the map to show individual user locations and movement, instead of all users at once.
 
-[![IBM Bluemix logo](http://upload.wikimedia.org/wikipedia/commons/c/c7/IBM_Bluemix_logo.svg "IBM Bluemix")](https://console.ng.bluemix.net/)
-
 ## Deploy to IBM Bluemix
 
 ### One-Click Deployment
