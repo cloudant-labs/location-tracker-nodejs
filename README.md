@@ -41,7 +41,7 @@ Install the project's dependencies and initialize the database:
 
 1. **Run** the project through [Foreman](https://github.com/ddollar/foreman):
 
-    $ foreman start
+        $ foreman start
 
 2. **Authenticate** by clicking the sign up link. Iif this is your first time logging in, enter your email address and a password. If not, click the "Go Sign In" link. 
 
