@@ -2,7 +2,7 @@
 
 The Cloudant Location Tracker is a demo web application which records a device's location and saves this information to [IBM Cloudant](https://cloudant.com/).
 
-UPDATE June, 2016:  We have several sample apps covering location tracking with Cloudant. Use the one that fits your coding needs best. There's a bare-bones [couchapp](https://github.com/cloudant-labs/location-tracker-couchapp/), [one for Angular (version 1)/NodeJS developers](https://github.com/cloudant-labs/location-tracker-nodejs), and the [latest using Swift/iOS on the client-side](https://github.com/ibm-cds-labs/location-tracker-client-swift) with a [NodeJS back-end](https://github.com/ibm-cds-labs/location-tracker-server-nodejs/).
+UPDATE June, 2016:  We have several sample apps covering location tracking with Cloudant. Use the one that fits your coding needs best. There's a bare-bones [couchapp](https://github.com/cloudant-labs/location-tracker-couchapp/), [this one for Angular (version 1)/NodeJS developers](https://github.com/cloudant-labs/location-tracker-nodejs), and the [latest using Swift/iOS on the client-side](https://github.com/ibm-cds-labs/location-tracker-client-swift) with a [NodeJS back-end](https://github.com/ibm-cds-labs/location-tracker-server-nodejs/).
 
 ## Cloning
 
@@ -10,26 +10,6 @@ Get the project and change into the project directory:
 
     $ git clone https://github.com/cloudant-labs/location-tracker-nodejs.git
     $ cd location-tracker-nodejs
-
-## Configuring Local Development
-
-Local configuration is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
-
-    VCAP_SERVICES={"cloudantNoSQLDB": [{"name": "cloudant-location-tracker-db","label": "cloudantNoSQLDB","plan": "Shared","credentials": {"username": "your-username","password": "your-password","host": "your-host","port": 443,"url": "https://your-username:your-password@your-host"}}]}
-
-**Note:**  Services created within Bluemix are automatically added to the `VCAP_SERVICES` environment variable. Therefore, no configuration is needed for Bluemix.
-
-## Installing
-
-Install the project's dependencies:
-
-    $ npm install
-
-## Running
-
-Run the project through [Foreman](https://github.com/ddollar/foreman):
-
-    $ foreman start
 
 ## Configuring IBM Bluemix
 
@@ -41,7 +21,33 @@ Complete these steps first if you have not already:
 
 Create a Cloudant service within Bluemix if one has not already been created:
 
-    $ cf create-service cloudantNoSQLDB Shared cloudant-location-tracker-db
+    $ cf create-service cloudantNoSQLDB Lite cloudant-location-tracker-db
+
+## Configuring Local Development
+
+Local configuration is done through a `.env` file. One environment variable, `VCAP_SERVICES`, is needed in order to configure your local development environment. The value of the `VCAP_SERVICES` is a string representation of a JSON object. Here is an example `.env` file:
+
+    VCAP_SERVICES={"cloudantNoSQLDB": [{"name": "cloudant-location-tracker-db","label": "cloudantNoSQLDB","plan": "Shared","credentials": {"username": "your-username","password": "your-password","host": "your-host","port": 443,"url": "https://your-username:your-password@your-host"}}]}
+
+**Note:**  Services created within Bluemix are automatically added to the `VCAP_SERVICES` environment variable. Therefore, no configuration is needed for Bluemix.
+
+## Installing
+
+Install the project's dependencies and initialize the database:
+
+    $ npm install
+
+## Running
+
+1. **Run** the project through [Foreman](https://github.com/ddollar/foreman):
+
+    $ foreman start
+
+2. **Authenticate** by clicking the sign up link. Iif this is your first time logging in, enter your email address and a password. If not, click the "Go Sign In" link. 
+
+3. **Track** locations by simply doing nothing or moving around by foot, bike or vehicle. Location data is saved in your browser in a [PouchDB database](https://pouchdb.com/).
+
+4. **Persist** the data to the cloud by clicking "Stop & Save Location Data". Everything is saved to the Cloudant database you created earlier, with your username included in each location reading.
 
 ## Deploying
 
