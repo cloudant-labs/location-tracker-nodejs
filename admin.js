@@ -2,11 +2,14 @@
 // Licensed under the Apache 2.0 License. See footer for details.
 
 var express = require('express'),
+    http = require('http'),
     path = require('path'),
     cloudant = require('cloudant'),
     program = require('commander'),
     dotenv = require('dotenv'),
     pkg = require(path.join(__dirname, 'package.json'));
+
+http.post = require('http-post');
 
 dotenv.load();
 
@@ -26,6 +29,10 @@ var app = express();
       }
     }
   }
+  if (process.env.VCAP_APPLICATION) {
+    var vcapApplication = JSON.parse(process.env.VCAP_APPLICATION);
+    app.set('vcapApplication', vcapApplication);
+  }
 })(app);
 
 program
@@ -36,24 +43,16 @@ program
   .command('db <method>')
   .description('Create (put) or delete the database')
   .action(function(method, options) {
-    var cloudant = app.get('cloudant-location-tracker-db');
-    if (!cloudant) {
+    var cloudantService = app.get('cloudant-location-tracker-db');
+    if (!cloudantService) {
       console.error('No database configured');
       return;
     }
     switch (method) {
       case 'put':
-        cloudant.db.create('location-tracker', function(err, body) {
+        cloudantService.db.create('location-tracker', function(err, body) {
           if (!err) {
             console.log('Location tracker database created');
-            // TODO: Make this happen even if location tracker database already exists
-            cloudant.set_permissions({database:'location-tracker', username:'nobody', roles:['_reader']}, function(err, result) {
-              if (!err) {
-                console.log('Location tracker database is now world readable');
-              } else {
-                console.error('Error setting permissions on location tracker database');
-              }
-            });
             var userLocationIndex = {
               name: 'user-location',
               type: 'json',
@@ -65,7 +64,7 @@ program
               }
             };
             // TODO: Make this happen even if location tracker database already exists
-            cloudant.use('location-tracker').index(userLocationIndex, function(err, result) {
+            cloudantService.use('location-tracker').index(userLocationIndex, function(err, result) {
               if (!err) {
                 console.log('User location index created');
               } else {
@@ -84,7 +83,7 @@ program
               }
             };
             // TODO: Make this happen even if location tracker database already exists
-            cloudant.use('users').index(userApiKeyIndex, function(err, result) {
+            cloudantService.use('users').index(userApiKeyIndex, function(err, result) {
               if (!err) {
                 console.log('User key index created');
               } else {
@@ -103,7 +102,7 @@ program
             }
           }
         });
-        cloudant.db.create('users', function(err, body) {
+        cloudantService.db.create('users', function(err, body) {
           if (!err) {
             console.log('Users database created');
           } else {
@@ -116,7 +115,7 @@ program
         });
         break;
       case 'delete':
-        cloudant.db.destroy('location-tracker', function(err, body) {
+        cloudantService.db.destroy('location-tracker', function(err, body) {
           if (!err) {
             console.log('Database deleted');
           } else {
@@ -127,7 +126,7 @@ program
             }
           }
         });
-        cloudant.db.destroy('users', function(err, body) {
+        cloudantService.db.destroy('users', function(err, body) {
           if (!err) {
             console.log('Users database deleted');
           } else {
@@ -152,23 +151,27 @@ program
   .command('api <endpoint>')
   .description('Call an API endpoint with preconfigured settings')
   .action(function(endpoint, options) {
-    var cloudant = app.get('cloudant-location-tracker-db');
-    if (!cloudant) {
+    var cloudantService = app.get('cloudant-location-tracker-db');
+    if (!cloudantService) {
       console.error('No database configured');
       return;
     }
     switch (endpoint) {
-      case 'set_permissions':
-        cloudant.set_permissions({
-          database: 'location-tracker',
-          username: 'nobody',
-          roles: ['_reader']
-        }, function(err, result) {
-          if (!err) {
-            console.log('Permissions set');
-          } else {
-            console.error('Error setting permission');
+      case 'set_security':
+        var locationTrackerDb = cloudantService.use('location-tracker');
+        locationTrackerDb.get_security(function(err, result) {
+          var security = result.cloudant;
+          if (!security) {
+            security = {};
           }
+          security['nobody'] = ['_reader'];
+          locationTrackerDb.set_security(security, function(err, result) {
+            if (!err) {
+              console.log('Location tracker database is now world readable');
+            } else {
+              console.error('Error setting permissions on location tracker database');
+            }
+          });
         });
         break;
     }
@@ -176,6 +179,18 @@ program
     console.log('  Examples:');
     console.log();
     console.log('    $ api set_permissions');
+    console.log();
+  });
+
+program
+  .command('track')
+  .description('Track application deployments')
+  .action(function(options) {
+    require('cf-deployment-tracker-client').track();
+  }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ track');
     console.log();
   });
 

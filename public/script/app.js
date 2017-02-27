@@ -184,13 +184,13 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
         if (navigator.geolocation) {
 
             /* vars to pass into leaflet map object */
-            var osmUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
+            var osmUrl = 'https://{s}.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYnJhZGxleS1ob2x0IiwiYSI6IjAyNDM4Njc4MjY0MzFhODBiOTQ0NGJhNTAxMDVmNGZiIn0.4neomrdr6V2_UFEgj4WKfg';
             var osmAttrib = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
                 '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
                 'Imagery © <a href="http://mapbox.com">Mapbox</a>';
             var osm = new L.TileLayer(osmUrl, {
                 attribution: osmAttrib,
-                id: 'examples.map-i875mjb7'
+                id: 'mapbox.streets'
             });
 
             /* instantiate Leaflet tracking map */
@@ -456,13 +456,13 @@ angular.module('locationTrackingApp', ['ngAnimate', 'ngRoute'])
                 mapResult = new L.Map('mapResult');
             }
 
-            L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+            L.tileLayer('https://{s}.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYnJhZGxleS1ob2x0IiwiYSI6IjAyNDM4Njc4MjY0MzFhODBiOTQ0NGJhNTAxMDVmNGZiIn0.4neomrdr6V2_UFEgj4WKfg', {
                 maxZoom: 20,
                 attribution: 'Map data &copy; ' +
                     '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
                     '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 detectRetina: true,
-                id: 'examples.map-20v6611k'
+                id: 'mapbox.streets'
             }).addTo(mapResult);
 
             var last_lat = 0;

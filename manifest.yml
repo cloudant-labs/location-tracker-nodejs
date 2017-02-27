@@ -1,4 +1,8 @@
 ---
+declared-services:
+  cloudant-location-tracker-db:
+    label: cloudantNoSQLDB
+    plan: Shared
 applications:
 - name: cloudant-location-tracker
   memory: 128M
